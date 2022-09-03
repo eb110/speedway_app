@@ -1,7 +1,10 @@
 export default class InsertedMatch{
     insertMatch = async (im) => {
+        let datka = Date.now();
         let matchName = {
-            name: im
+            name: im,
+            created: datka,
+            lastUpdated: datka
         }
         try{
             return await fetch(`http://localhost:8080/insertedMatch/insertMatchName`, {

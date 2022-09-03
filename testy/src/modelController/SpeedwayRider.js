@@ -143,6 +143,8 @@ export default class SpeedwayRider{
     }
     
     updateTheRiderInDB = async (rdr) => {
+        let datka = Date.now();
+        rdr.lastUpdated = datka
         try{
            await fetch(`http://localhost:8080/rider/updateRider/${rdr.id}`, {
                method: 'PUT',

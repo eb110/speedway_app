@@ -11,7 +11,7 @@ export default class SpeedwayMatchRider{
     }
 
     async insertRiderMatch(rdr, homeAway, teamId, matchId, mrId){
-      //  console.log('rider id: ' + rdr.id)
+        let datka = Date.now();
             let matchRider = {
                 id: mrId,
                 homeAwaySide: homeAway,
@@ -19,7 +19,9 @@ export default class SpeedwayMatchRider{
                 fkIdTeam: teamId,
                 fkIdMatch: matchId,
                 riderMatchNumber: rdr.nr,
-                pkt: rdr.pkt
+                pkt: rdr.pkt,
+                created: datka,
+                lastUpdated: datka
             }
 
             await fetch(`http://localhost:8080/matchRider/addMatchRider`, {

@@ -11,11 +11,14 @@ export default class SpeedwayMatch{
     }
 
     async insertMatch(id, date, rnd, lg){
+        let datka = Date.now();
         let newMatch = {
             id: id + 1,
             dateOfMatch: date,
             round: rnd,
-            typeOfGame: lg
+            typeOfGame: lg,
+            created: datka,
+            lastUpdated: datka
         }
         try{
             return await fetch(`http://localhost:8080/match/addMatch`, {
