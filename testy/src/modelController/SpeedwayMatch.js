@@ -33,4 +33,10 @@ export default class SpeedwayMatch{
             }
       }
 
+    sumTeamPoints(riders){
+        for(let i = 0; i < riders.length; i++){
+            console.log(riders.pointsString)
+        }
+    }
+
 }

@@ -20,37 +20,37 @@ export default class SpeedwayRider{
         }
     }
 
-    traverseJsonRider(base, copyMatch, homeAwayTeam, i, match){
-        if(base.length > 0){
-            for(let j = 0; j < base.length; j++){  
-              if(base[j].name.substring(0, copyMatch[homeAwayTeam][i].name.length) === copyMatch[homeAwayTeam][i].name){
-                copyMatch[homeAwayTeam][i].pts = copyMatch[homeAwayTeam][i].points
-                for(const key in base[j]){
-                  copyMatch[homeAwayTeam][i][key] = base[j][key]
-                  if(copyMatch[homeAwayTeam][i][key] === null){
-                    copyMatch[homeAwayTeam][i][key] = ''
-                  }
-                }
-  
-                let temp = copyMatch[homeAwayTeam][i].points
-                copyMatch[homeAwayTeam][i].points = copyMatch[homeAwayTeam][i].pts
-                copyMatch[homeAwayTeam][i].pts = temp
-                let currentDate = new Date().getFullYear()
-                if(base[j].ripDate)
-                  currentDate = +base[j].ripDate.substring(0, 4)             
-                copyMatch[homeAwayTeam][i].birthDate = base[j].birthDate.substring(0, 10)
-                if(base[j].ripDate)
-                  copyMatch[homeAwayTeam][i].ripDate = base[j].ripDate.substring(0, 10)
-                copyMatch[homeAwayTeam][i].age = currentDate - +copyMatch[homeAwayTeam][i].birthDate.substring(0, 4)
-                copyMatch[homeAwayTeam][i].seasonAge = +match.dateOfGame.substring(match.dateOfGame.lastIndexOf('-') + 1) - +copyMatch[homeAwayTeam][i].birthDate.substring(0, 4)
-                match = copyMatch
-                break
-              }
-            }
-            return copyMatch
-          }
+    async fetchRidersFromDB(match, index){
+        if(index < 0){
+            return match
         }
-    
+        return await this.getAllBySurname(match.riders[index].surname)
+        .then((res) => this.concatRiderParserWithRiderDB(match.riders[index], res, match.dateOfGame))
+        .then((res) => 
+            {
+                match.riders[index] = res; 
+                return this.fetchRidersFromDB(match, index - 1)})
+    }
+
+    concatRiderParserWithRiderDB(rider, riderDB, matchDate){
+        riderDB = riderDB.find((rdr) => rdr.name.substring(0, rider.name.length) === rider.name)
+        if(riderDB){
+            for(const key in riderDB){
+                rider[key] = riderDB[key]
+            }
+            let currentDate = new Date().getFullYear()
+            if(rider.ripDate){
+                currentDate = +rider.ripDate.substring(0, 4) 
+                rider.ripDate = rider.ripDate.substring(0, 10)
+            }
+            rider.birthDate = rider.birthDate.substring(0, 10)
+            rider.age = currentDate - +rider.birthDate.substring(0, 4)          
+            rider.seasonAge = +matchDate.substring(matchDate.lastIndexOf('-') + 1) - +rider.birthDate.substring(0, 4)
+            rider.edit = false
+            }
+        return rider
+    }
+
     async parseRiderJson(copyMatch, homeAwayTeam, match){
         for(let i = 0; i < copyMatch[homeAwayTeam].length; i++){ 
             let surname = this.checkSurname(copyMatch[homeAwayTeam][i].surname)

@@ -23,12 +23,14 @@ const SpeedwayMatch = () => {
 
     const updateRiders = async () => {
 
+     // console.log(match)
+
         let copyMatch = match
 
-        await parseRiderJson(copyMatch, 'awayRiders')
-        await parseRiderJson(copyMatch, 'homeRiders')
+        //await parseRiderJson(copyMatch, 'awayRiders')
+        await new SpeedwayRider().fetchRidersFromDB(match, match.riders.length - 1).then((res) => setMatch(Object.assign({}, res)))
     
-        setMatch(Object.assign({}, copyMatch))
+      //  setMatch(Object.assign({}, copyMatch))
       } 
       
     updateRiders()
@@ -49,10 +51,6 @@ const SpeedwayMatch = () => {
 
     }
 
-    const parseRiderJson = async (copyMatch, homeAwayTeam) => {
-      let sr = new SpeedwayRider()
-      await sr.parseRiderJson(copyMatch, homeAwayTeam, match).then((res) => setMatch[res])
-    }
 
     const handleInputHomeTeamChange = (event) => {
       const {value} = event.target;
@@ -72,12 +70,16 @@ const SpeedwayMatch = () => {
       setAwayTeam(temp)
     }
 
-    const editButton = (riderNumber, flag) => {
-      let copyMatch = Object.assign({}, match)
-      copyMatch.data = riderNumber
-      copyMatch = JSON.stringify(copyMatch)
-      if(flag)
-        navigate(`/newRider/${copyMatch}`)
+    const editButton = (riderNumber) => {
+      for(let i = 0; i < match.riders.length; i++){
+        if(match.riders[i].nr === riderNumber){
+          match.riders[i].edit = true
+          console.log(match.riders[i])
+          break
+        }
+      }
+      navigate(`/newRider/${JSON.stringify(match)}`)
+   //   let copyMatch = Object.assign({}, match)
       }
 
     const updateTeam = async (event, mask) => {
@@ -133,7 +135,7 @@ const SpeedwayMatch = () => {
 
     <div>
       <div>
-        Data: {match.dateOfGame} Runda: {match.round} Liga: {match.league}
+        Data: {match.dateOfGame} - {match.league}
       </div>
       <div>
         GOŚCIE:
@@ -152,8 +154,8 @@ const SpeedwayMatch = () => {
         }  
       </div>
       <RidersComponent
-        matchResult={match.awayRiders}
-        matchTeam={awayTeam.fullName}
+        match={match}
+        homeAway='away'
         funkcja={editButton}
       />
       <div>
@@ -173,8 +175,8 @@ const SpeedwayMatch = () => {
         }  
       </div>
       <RidersComponent
-        matchResult={match.homeRiders}
-        matchTeam={homeTeam.fullName}
+        match={match}
+        homeAway='home'
         funkcja={editButton}
       />
       <div>

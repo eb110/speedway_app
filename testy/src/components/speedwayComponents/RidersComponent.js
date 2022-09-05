@@ -1,6 +1,6 @@
 
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import RiderPoints from './RiderPoints';
 import Polska from '../../public/img/flags/Polska.svg';
 import Szwecja from '../../public/img/flags/Szwecja.svg';
@@ -21,48 +21,26 @@ import Francja from '../../public/img/flags/Francja.svg';
 
 const RidersComponent = (props) => {
 
-    const{matchResult, matchTeam, funkcja} = props
-
-
-    const [teamPoints, setTeamPoints] = useState(0)
-    const [runsSum, setRunsSum] = useState(0)
+    let match = props.match
+    let riderUpdate = props.funkcja
+    let ha = props.homeAway
+    let riders = ha === 'away' ? match.riders.filter((rider) => rider.homeAway === 'away') : match.riders.filter((rider) => rider.homeAway === 'home')
 
     let flag = {'Polska': Polska, 'Szwecja': Szwecja, 'Anglia': Anglia, 'Norwegia': Norwegia, 'Australia': Australia, 'Łotwa': Łotwa, 
     'Niemcy': Niemcy, 'Rosja': Rosja, 'Dania': Dania, 'Ukraina': Ukraina, 'Czechy': Czechy, 'Węgry': Węgry, 'Słowacja': Słowacja, 
     'Słowenia': Słowenia, 'Francja': Francja}
         
     let key = 0
-    let updateButtonRiderIndex = 0
-    let tempPointsSum = 0
-    let tempRunsSum = 0
    
-    const countTeamPoints = (pts, biegi) => {
-     //   console.log('pts: ' + pts + 'biegi: ' + biegi)
-        tempPointsSum += pts
-        tempRunsSum += biegi
-        setTeamPoints(tempPointsSum)
-        setRunsSum(tempRunsSum)
-    }
-    
     //add or update the rider, based on the SpeedwayMatch.js testButton function
     const editRider = (event) => {
-        let index = event.target.name
-        funkcja(matchResult[index].nr, true)
+        let riderNr = event.target.name
+        riderUpdate(riderNr)
     }
 
     return (
             <div>
-                <div
-                  style={{
-                    border: '1px solid red',
-                    marginLeft: 'auto',
-                    marginRight: 'auto',
-                    width: '30%'
-                    }}
-                >
-                    {matchTeam}: {teamPoints} Biegi: {runsSum}
-                </div>
-               {matchResult.map((rider) => (
+               {riders.map((rider) => (
                 <div
                     key={key++} 
                     style={{display: 'block'}}
@@ -106,7 +84,7 @@ const RidersComponent = (props) => {
                                 }}
                             >
                                 <button
-                                    name={updateButtonRiderIndex++}
+                                    name={rider.nr}
                                     onClick={editRider}
                                 >U</button>
                             </div>   
@@ -115,17 +93,14 @@ const RidersComponent = (props) => {
                     <div 
                         style={{
                             display: 'inline-block', 
-                            width: "40%",
+                            width: "10%",
                             border: '1px solid blue',
                             textAlign: 'left',
                             paddingLeft: '5px',
                             margin: '1px'}}
                         key={key++}
                     >
-                        <RiderPoints
-                            pts={rider.points}
-                            calculateTeamPoints={countTeamPoints}
-                        />
+                        {rider.pointsString}
 
                     </div>
                 </div>                

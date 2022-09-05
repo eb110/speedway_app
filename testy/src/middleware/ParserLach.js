@@ -16,12 +16,15 @@ class ParserLach {
         this.homeRiders = []
         this.awayRiders = []
         this.official = ""
+        this.riders = []
+        this.fetchRidersFromDB = true
         this.roundAndLeagueParser()
         this.teamsNamesParser()
         this.dateOfGameParser()
         this.teamParser(1, this.awayRiders)
         this.teamParser(2, this.homeRiders)
         this.parseOfficial()
+        this.consolidateRiders();
     }
 
     roundAndLeagueParser(){
@@ -30,6 +33,19 @@ class ParserLach {
         this.round = this.data.substring(this.data.indexOf('RUNDA') -4, this.data.indexOf('RUNDA') - 1).replaceAll(' ', '')
         if(this.round.length === 0)
             this.round = 'PO'
+    }
+
+    consolidateRiders(){
+        for(let i = 0; i < this.awayRiders.length; i++){
+            let wsad = this.awayRiders[i]
+            wsad.homeAway = 'away'
+            this.riders.push(wsad)
+        }
+        for(let i = 0; i < this.homeRiders.length; i++){
+            let wsad = this.homeRiders[i]
+            wsad.homeAway = 'home'
+            this.riders.push(wsad)
+        }
     }
 
 
@@ -73,11 +89,11 @@ class ParserLach {
             else{
                 rider.surname = rider.surname.substring(0, rider.surname.indexOf(' '))
             }         
-            rider.points = wsad.substring(wsad.indexOf('(') + 1, wsad.indexOf(')'))
+            rider.pointsString = wsad.substring(wsad.indexOf('(') + 1, wsad.indexOf(')'))
             //as there is an issue with '/-' during the render
             //if rider has had an accident and has been replaced then the 'z' letter
             //is provided
-            rider.points = rider.points.replaceAll('/-', 'z')
+            rider.pointsString = rider.pointsString.replaceAll('/-', 'z')
             arr.push(rider)    
         }
     }

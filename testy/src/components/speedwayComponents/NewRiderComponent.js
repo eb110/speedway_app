@@ -4,56 +4,25 @@ import SpeedwayRider from '../../modelController/SpeedwayRider';
 
 const NewRiderComponent = (props) => {
 
-    let insertOrUpdateFlag = 1
-
     const navigate = useNavigate()
 
-    const {matchDetails} = props
-    let match = JSON.parse(matchDetails)
-
-    let riderNr = +match.data
-    let name = ''
-    let surname = ''
-    let dob = ''
-    let dod = ''
-    let country = ''
-    let pob = ''
-    let pod = ''
-    let rider = ''
-    
-    if(riderNr < 9)
-        rider = match.awayRiders.filter(x => +x.nr === riderNr)[0]
-    else
-        rider = match.homeRiders.filter(x => +x.nr === riderNr)[0]
-
-    name = rider.name
-    surname = rider.surname
-    dob = rider.birthDate
-    dod = rider.ripDate
-    country = rider.countryOfBirth
-    pob = rider.placeOfBirth
-    pod = rider.placeOfRip
-
-    if(country || dob)
-        insertOrUpdateFlag = 2
-
-    if(!dob){
-        dob = 'xxxx-xx-xx'
-        dod = 'xxxx-xx-xx'
-        country = 'Polska'
-        pob = ''
-        pod = ''
+    let match = JSON.parse(props.matchDetails)
+    let index = ''
+    for(let i = 0; i < match.riders.length; i++){
+        if(match.riders[i].edit){
+            index = i
+            break
+        }
     }
 
-    const[riderName, setRiderName] = useState(name)
-    const[riderDOB, setRiderDOB] = useState(dob)
-  
-    const[riderPOB, setRiderPOB] = useState(pob)
-    const[riderDOD, setRiderDOD] = useState(dod)
-    const[riderPOD, setRiderPOD] = useState(pod)
-    const[riderCOB, setRiderCOB] = useState(country)
+    const[riderName, setRiderName] = useState(match.riders[index].name)
+    const[riderDOB, setRiderDOB] = useState('xxxx-xx-xx')
+    const[riderPOB, setRiderPOB] = useState('')
+    const[riderDOD, setRiderDOD] = useState('xxxx-xx-xx')
+    const[riderPOD, setRiderPOD] = useState('')
+    const[riderCOB, setRiderCOB] = useState('Polska')
 
-    surname = surname[0] + surname.substring(1).toLowerCase()
+    let surname = match.riders[index].surname[0] + match.riders[index].surname.substring(1).toLowerCase()
 
     const[riderSurname, setRiderSurname] = useState(surname)
 
@@ -93,36 +62,7 @@ const NewRiderComponent = (props) => {
     }
 
     const handleButtonClick = () => {
-        if(insertOrUpdateFlag === 1)
             postNewRider()
-        else{
-            updateTheRider()
-        }
-    }
-
-    const updateTheRider = async () => {
-        let datka = Date.now();
-        let speedway_rider = {
-            birthDate: riderDOB,
-            bonuses: rider.bonuses,
-            countryOfBirth: riderCOB,
-            fullPerfects: rider.fullPerfects,
-            games: rider.games,
-            heats: rider.heats,
-            name: riderName,
-            paidPerfects: rider.paidPerfects,
-            placeOfBirth: riderPOB,
-            placeOfRip: riderPOD,
-            points: rider.pts,
-            ripDate: riderDOD,
-            surname: riderSurname,
-            created: rider.created,
-            lastUpdated: datka,
-            id: rider.id
-        }
-        await new SpeedwayRider().updateTheRiderInDB(speedway_rider)
-        .then(() => navigate(`/speedwayMatch/${matchDetails}`))
-
     }
 
     const postNewRider = async () => {
@@ -144,8 +84,12 @@ const NewRiderComponent = (props) => {
             created: datka,
             lastUpdated: datka
         }
+        for(const key in speedway_rider){
+            match.riders[index][key] = speedway_rider[key]
+        }
+        match.riders[index].edit = false
         await new SpeedwayRider().postNewRider(speedway_rider)
-        .then(() => navigate(`/speedwayMatch/${matchDetails}`))
+        .then(() => navigate(`/speedwayMatch/${JSON.stringify(match)}`))
 
     }
 
@@ -168,7 +112,7 @@ const NewRiderComponent = (props) => {
                 <label>Name: </label>
                 <input
                     style={{width: "30%"}}
-                    placeholder={name}
+                    placeholder={riderName}
                     value={riderName}
                     onChange={handleInputNameChange}
                 />
@@ -198,7 +142,7 @@ const NewRiderComponent = (props) => {
                  <label>Country of birth: </label>
                 <input
                     style={{width: "30%"}}
-                    placeholder={country}
+                    placeholder={riderCOB}
                     value={riderCOB}
                     onChange={handleInputCOBChange}
             />
@@ -213,7 +157,7 @@ const NewRiderComponent = (props) => {
                  <label>Date of birth: </label>
                 <input
                     style={{width: "30%"}}
-                    placeholder={dob}
+                    placeholder={riderDOB}
                     value={riderDOB}
                     onChange={handleInputDOBChange}
             />
@@ -228,7 +172,7 @@ const NewRiderComponent = (props) => {
                  <label>Place of birth: </label>
                 <input
                     style={{width: "30%"}}
-                    placeholder={pob}
+                    placeholder={riderPOB}
                     value={riderPOB}
                     onChange={handleInputPOBChange}
             />
@@ -243,7 +187,7 @@ const NewRiderComponent = (props) => {
                  <label>Date of death: </label>
                 <input
                     style={{width: "30%"}}
-                    placeholder={dod}
+                    placeholder={riderDOD}
                     value={riderDOD}
                     onChange={handleInputDODChange}
             />
@@ -258,7 +202,7 @@ const NewRiderComponent = (props) => {
                  <label>Place of death: </label>
                 <input
                     style={{width: "30%"}}
-                    placeholder={pod}
+                    placeholder={riderPOD}
                     value={riderPOD}
                     onChange={handleInputPODChange}
             />
