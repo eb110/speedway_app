@@ -20,6 +20,10 @@ export default class SpeedwayRider{
         }
     }
 
+    /*
+    It is a recursive call as its important to make sure all riders has been fetched from the db
+    and promise call has been attached to each and every db call
+    */
     async fetchRidersFromDB(match, index){
         if(index < 0){
             return match
@@ -28,6 +32,7 @@ export default class SpeedwayRider{
         .then((res) => this.concatRiderParserWithRiderDB(match.riders[index], res, match.dateOfGame))
         .then((res) => 
             {
+                //rider fetched from the rlach is replaced by the rider fetched from the db
                 match.riders[index] = res; 
                 return this.fetchRidersFromDB(match, index - 1)})
     }
@@ -49,15 +54,6 @@ export default class SpeedwayRider{
             rider.edit = false
             }
         return rider
-    }
-
-    async parseRiderJson(copyMatch, homeAwayTeam, match){
-        for(let i = 0; i < copyMatch[homeAwayTeam].length; i++){ 
-            let surname = this.checkSurname(copyMatch[homeAwayTeam][i].surname)
-            await this.getAllBySurname(surname)
-            .then((res) => this.traverseJsonRider(res, copyMatch, homeAwayTeam, i, match))
-         }
-         return copyMatch 
     }
 
     async postNewRider (newRider) {

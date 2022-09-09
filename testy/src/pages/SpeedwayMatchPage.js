@@ -8,9 +8,8 @@ import InsertedMatch from '../modelController/InsertedMatch';
 
 const SpeedwayMatch = () => {
 
-  const {matchDetails} = useParams();
   const navigate = useNavigate()
-  const [match, setMatch] = useState(JSON.parse(matchDetails))
+  const [match, setMatch] = useState(JSON.parse(useParams().matchDetails))
   const [homeTeam, setHomeTeam] = useState({fullName: match.home, name:match.home})
   const [awayTeam, setAwayTeam] = useState({fullName: match.away, name: match.away})
 
@@ -22,15 +21,7 @@ const SpeedwayMatch = () => {
   useEffect(() => {
 
     const updateRiders = async () => {
-
-     // console.log(match)
-
-        let copyMatch = match
-
-        //await parseRiderJson(copyMatch, 'awayRiders')
         await new SpeedwayRider().fetchRidersFromDB(match, match.riders.length - 1).then((res) => setMatch(Object.assign({}, res)))
-    
-      //  setMatch(Object.assign({}, copyMatch))
       } 
       
     updateRiders()
@@ -79,7 +70,6 @@ const SpeedwayMatch = () => {
         }
       }
       navigate(`/newRider/${JSON.stringify(match)}`)
-   //   let copyMatch = Object.assign({}, match)
       }
 
     const updateTeam = async (event, mask) => {
