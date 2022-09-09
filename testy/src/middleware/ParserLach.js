@@ -18,6 +18,10 @@ class ParserLach {
         this.official = ""
         this.riders = []
         this.fetchRidersFromDB = true
+        this.awayResultPoints = 0.0
+        this.homeResultPoints = 0.0
+        this.awayHeats = 0
+        this.homeHeats = 0
         this.roundAndLeagueParser()
         this.teamsNamesParser()
         this.dateOfGameParser()
@@ -25,6 +29,16 @@ class ParserLach {
         this.teamParser(2, this.homeRiders)
         this.parseOfficial()
         this.consolidateRiders();
+        
+        let res = this.countResult(this.awayRiders)
+        this.awayResultPoints = res[0]
+        this.awayHeats = res[1]
+        this.awayRiders = res[2]
+        res = this.countResult(this.homeRiders)
+        this.homeResultPoints = res[0]
+        this.homeHeats = res[1]
+        this.homeRiders = res[2]
+        
     }
 
     roundAndLeagueParser(){
@@ -105,6 +119,47 @@ class ParserLach {
         this.official += this.data.substring(0, this.data.indexOf(' '))
         this.official = this.official.trim()
         this.data = ''
+    }
+
+    countResult(riders){
+        let result = 0.0
+        let heats = 0
+        for(let i = 0; i < riders.length; i++){
+            let points = riders[i].pointsString.split(',')
+            let bonus = 0;
+            let point = 0.0
+            let heat = 0
+            let fullPerfect = 0
+            let paidPerfect = 0
+            for(let j = 0; j < points.length; j++){
+                let heatRecord = points[j];
+                let pointTemp = 0.0;
+                if(heatRecord.includes("."))
+                    pointTemp = parseFloat(heatRecord.substring(0, 3));               
+                if('0123456789'.includes(heatRecord[0]))
+                    pointTemp = +("" + heatRecord[0])             
+                if(heatRecord.includes("*"))
+                    bonus++;
+                point += pointTemp;
+                result += pointTemp;
+                heats++;
+                heat++;
+            }
+  
+            if(heat === 5 && point === 15){
+                fullPerfect++;
+            }
+            else if(heat === 5 && point + bonus === 15) {
+                paidPerfect++;
+            }
+            riders[i].heat = heat
+            riders[i].pts = point
+            riders[i].bonus = bonus
+            riders[i].match = 1
+            riders[i].fullPerfect = fullPerfect
+            riders[i].paidPerfect = paidPerfect
+        }
+        return [result, heats, riders]
     }
 
 }

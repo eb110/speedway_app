@@ -13,6 +13,8 @@ const SpeedwayMatch = () => {
   const [homeTeam, setHomeTeam] = useState({fullName: match.home, name:match.home})
   const [awayTeam, setAwayTeam] = useState({fullName: match.away, name: match.away})
 
+  console.log(match)
+
   const [renderHomeTeamInput, setRenderHomeTeamInput] = useState(false)
   const [renderAwayTeamInput, setRenderAwayTeamInput] = useState(false)
 
