@@ -4,6 +4,7 @@ import SpeedwayTeam from '../../modelController/SpeedwayTeam';
 const Team = (props) => {
 
     const [match, setMatch] = useState(props.match)
+    const updateMatchComponent = props.updateMatchComponent;
     const [renderTeamInput, setRenderTeamInput] = useState(false)
     const homeAway = props.homeAway 
     const side = homeAway === "away" ? 'GOŚCIE' : 'GOSPODARZE'
@@ -44,6 +45,7 @@ const Team = (props) => {
             lastUpdated: Date.now()
         }
         await new SpeedwayTeam().postNewTeam(newTeam)
+        .then(() => updateMatchComponent(match))
     }
 
     return (

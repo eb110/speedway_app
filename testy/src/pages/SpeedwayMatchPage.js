@@ -17,14 +17,19 @@ const SpeedwayMatch = () => {
   useEffect(() => {
 
     const updateRiders = async () => {
+        console.log('db read')
         await new SpeedwayRider().fetchRidersFromDB(match, match.riders.length - 1).then((res) => setMatch(Object.assign({}, res)))
       } 
-      
-    updateRiders()
+    
+    if(match.fetchRidersFromDB === true){  
+      updateRiders()
+      match.fetchRidersFromDB = false
+    }
 
     },[])
 
     const editButton = (riderNumber) => {
+      console.log('db read')
       for(let i = 0; i < match.riders.length; i++){
         if(match.riders[i].nr === riderNumber){
           match.riders[i].edit = true
@@ -35,6 +40,11 @@ const SpeedwayMatch = () => {
       navigate(`/newRider/${JSON.stringify(match)}`)
       }
 
+    const updateTheMatchFromTeamComponent = (matchFromTeamComponent) => {
+      console.log('db read')
+      setMatch(Object.assign({}, matchFromTeamComponent))
+    }
+    
     const confirmButton = async () => {
 
       let awayRds = []
@@ -78,23 +88,25 @@ const SpeedwayMatch = () => {
         <Team
           match={match}
           homeAway={'away'}
+          updateMatchComponent={updateTheMatchFromTeamComponent}
         />    
       </div>
-      <RidersComponent
-        match={match}
-        homeAway='away'
-        funkcja={editButton}
-      />
+        <RidersComponent
+          match={match}
+          homeAway='away'
+          funkcja={editButton}
+        />
       <div>
         <Team
           match={match}
           homeAway={'home'}
+          updateMatchComponent={updateTheMatchFromTeamComponent}
         />  
       </div>
-      <RidersComponent
-        match={match}
-        homeAway='home'
-        funkcja={editButton}
+        <RidersComponent
+          match={match}
+          homeAway='home'
+          funkcja={editButton}
       />
       <div>
         <button

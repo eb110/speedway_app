@@ -17,6 +17,7 @@ import Słowacja from '../../public/img/flags/Słowacja.svg';
 import Słowenia from '../../public/img/flags/Słowenia.svg';
 import Niemcy from '../../public/img/flags/Niemcy.svg';
 import Francja from '../../public/img/flags/Francja.svg';
+import Bułgaria from '../../public/img/flags/Bułgaria.svg';
 
 
 const RidersComponent = (props) => {
@@ -28,7 +29,7 @@ const RidersComponent = (props) => {
 
     let flag = {'Polska': Polska, 'Szwecja': Szwecja, 'Anglia': Anglia, 'Norwegia': Norwegia, 'Australia': Australia, 'Łotwa': Łotwa, 
     'Niemcy': Niemcy, 'Rosja': Rosja, 'Dania': Dania, 'Ukraina': Ukraina, 'Czechy': Czechy, 'Węgry': Węgry, 'Słowacja': Słowacja, 
-    'Słowenia': Słowenia, 'Francja': Francja}
+    'Słowenia': Słowenia, 'Francja': Francja, 'Bułgaria': Bułgaria}
         
     let key = 0
    
