@@ -9,6 +9,8 @@ class ParserLach {
        // console.log(data)
         this.data = data;
         this.home = ''
+        this.fullHomeName = undefined
+        this.fullAwayName = undefined
         this.away = ''
         this.round = ''
         this.league = ''
