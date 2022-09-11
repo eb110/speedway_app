@@ -5,6 +5,7 @@ import MatchResultCalculator from '../middleware/MatchResultCalculator';
 import SpeedwayRider from '../modelController/SpeedwayRider';
 import SpeedwayTeam from '../modelController/SpeedwayTeam';
 import InsertedMatch from '../modelController/InsertedMatch';
+import Team from '../components/speedwayComponents/Team';
 
 const SpeedwayMatch = () => {
 
@@ -12,8 +13,6 @@ const SpeedwayMatch = () => {
   const [match, setMatch] = useState(JSON.parse(useParams().matchDetails))
   const [homeTeam, setHomeTeam] = useState({fullName: match.home, name:match.home})
   const [awayTeam, setAwayTeam] = useState({fullName: match.away, name: match.away})
-
-  console.log(match)
 
   const [renderHomeTeamInput, setRenderHomeTeamInput] = useState(false)
   const [renderAwayTeamInput, setRenderAwayTeamInput] = useState(false)
@@ -130,7 +129,10 @@ const SpeedwayMatch = () => {
         Data: {match.dateOfGame} - {match.league}
       </div>
       <div>
-        GOŚCIE:
+        <Team
+          match={match}
+          homeAway={'away'}
+        />  
         {renderAwayTeamInput &&
           <div>
             <input
@@ -151,7 +153,10 @@ const SpeedwayMatch = () => {
         funkcja={editButton}
       />
       <div>
-        GOSPODARZE:
+        <Team
+          match={match}
+          homeAway={'home'}
+        /> 
         {renderHomeTeamInput &&
           <div>
             <input
