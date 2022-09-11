@@ -43,16 +43,24 @@ export default class SpeedwayRider{
             for(const key in riderDB){
                 rider[key] = riderDB[key]
             }
-            let currentDate = new Date().getFullYear()
-            if(rider.ripDate){
-                currentDate = +rider.ripDate.substring(0, 4) 
-                rider.ripDate = rider.ripDate.substring(0, 10)
-            }
-            rider.birthDate = rider.birthDate.substring(0, 10)
-            rider.age = currentDate - +rider.birthDate.substring(0, 4)          
-            rider.seasonAge = +matchDate.substring(matchDate.lastIndexOf('-') + 1) - +rider.birthDate.substring(0, 4)
+            rider = this.updateRiderBirthAttribs(rider, matchDate)
             rider.edit = false
             }
+        return rider
+    }
+
+    /*
+     Card_014
+    */
+    updateRiderBirthAttribs(rider, matchDate){
+        let currentDate = new Date().getFullYear()
+        if(rider.ripDate){
+            currentDate = +rider.ripDate.substring(0, 4) 
+            rider.ripDate = rider.ripDate.substring(0, 10)
+        }
+        rider.birthDate = rider.birthDate.substring(0, 10)
+        rider.age = currentDate - +rider.birthDate.substring(0, 4)          
+        rider.seasonAge = +matchDate.substring(matchDate.lastIndexOf('-') + 1) - +rider.birthDate.substring(0, 4)
         return rider
     }
 

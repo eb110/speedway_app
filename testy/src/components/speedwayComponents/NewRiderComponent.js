@@ -88,6 +88,10 @@ const NewRiderComponent = (props) => {
             match.riders[index][key] = speedway_rider[key]
         }
         match.riders[index].edit = false
+        /*
+        Card_014
+        */
+        match.riders[index] = new SpeedwayRider().updateRiderBirthAttribs(match.riders[index], match.dateOfGame)
         await new SpeedwayRider().postNewRider(speedway_rider)
         .then(() => navigate(`/speedwayMatch/${JSON.stringify(match)}`))
 
