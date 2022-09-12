@@ -68,6 +68,7 @@ const NewRiderComponent = (props) => {
     const postNewRider = async () => {
         let datka = Date.now();
         let speedway_rider = {
+            /*Related to card_006*/
             birthDate: riderDOB,
             bonuses: 0,
             countryOfBirth: riderCOB,
