@@ -45,6 +45,9 @@ const Team = (props) => {
             lastUpdated: Date.now()
         }
         await new SpeedwayTeam().postNewTeam(newTeam)
+        /*
+        Card_013
+        */
         .then(() => updateMatchComponent(match))
     }
 

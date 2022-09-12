@@ -40,6 +40,9 @@ const SpeedwayMatch = () => {
       navigate(`/newRider/${JSON.stringify(match)}`)
       }
 
+    /*
+    Card_013
+    */  
     const updateTheMatchFromTeamComponent = (matchFromTeamComponent) => {
       console.log('db read')
       setMatch(Object.assign({}, matchFromTeamComponent))
