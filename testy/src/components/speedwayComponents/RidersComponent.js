@@ -18,25 +18,25 @@ import Słowenia from '../../public/img/flags/Słowenia.svg';
 import Niemcy from '../../public/img/flags/Niemcy.svg';
 import Francja from '../../public/img/flags/Francja.svg';
 import Bułgaria from '../../public/img/flags/Bułgaria.svg';
-
+import USA from '../../public/img/flags/USA.svg';
 
 const RidersComponent = (props) => {
 
     let match = props.match
-    let riderUpdate = props.funkcja
+    let newRider = props.createNewRider
     let ha = props.homeAway
     let riders = ha === 'away' ? match.riders.filter((rider) => rider.homeAway === 'away') : match.riders.filter((rider) => rider.homeAway === 'home')
 
     let flag = {'Polska': Polska, 'Szwecja': Szwecja, 'Anglia': Anglia, 'Norwegia': Norwegia, 'Australia': Australia, 'Łotwa': Łotwa, 
     'Niemcy': Niemcy, 'Rosja': Rosja, 'Dania': Dania, 'Ukraina': Ukraina, 'Czechy': Czechy, 'Węgry': Węgry, 'Słowacja': Słowacja, 
-    'Słowenia': Słowenia, 'Francja': Francja, 'Bułgaria': Bułgaria}
+    'Słowenia': Słowenia, 'Francja': Francja, 'Bułgaria': Bułgaria, 'USA': USA}
         
     let key = 0
    
     //add or update the rider, based on the SpeedwayMatch.js testButton function
     const editRider = (event) => {
         let riderNr = event.target.name
-        riderUpdate(riderNr)
+        newRider(riderNr)
     }
 
     return (
@@ -89,7 +89,7 @@ const RidersComponent = (props) => {
                                 <button
                                     name={rider.nr}
                                     onClick={editRider}
-                                >U</button>}
+                                >Update</button>}
                             </div>   
                         </div>
                     </div>

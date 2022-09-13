@@ -28,7 +28,7 @@ const SpeedwayMatch = () => {
 
     },[])
 
-    const editButton = (riderNumber) => {
+    const newRider = (riderNumber) => {
       console.log('db read')
       for(let i = 0; i < match.riders.length; i++){
         if(match.riders[i].nr === riderNumber){
@@ -97,7 +97,7 @@ const SpeedwayMatch = () => {
         <RidersComponent
           match={match}
           homeAway='away'
-          funkcja={editButton}
+          createNewRider={newRider}
         />
       <div>
         <Team
@@ -109,7 +109,7 @@ const SpeedwayMatch = () => {
         <RidersComponent
           match={match}
           homeAway='home'
-          funkcja={editButton}
+          createNewRider={newRider}
       />
       <div>
         <button

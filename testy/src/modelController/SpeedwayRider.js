@@ -20,6 +20,16 @@ export default class SpeedwayRider{
         }
     }
 
+    getTheLastRider = async () => {
+        try{
+            console.log('getTheLastRider db read')
+            return await fetch(`http://localhost:8080/rider/getLastRider`)
+            .then((res) => res.json())
+        }catch(err){
+            console.log('get the last rider failed')
+        }
+    }
+
     /*
     It is a recursive call as its important to make sure all riders has been fetched from the db
     and promise call has been attached to each and every db call

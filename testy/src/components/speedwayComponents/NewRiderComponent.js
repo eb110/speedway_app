@@ -85,15 +85,12 @@ const NewRiderComponent = (props) => {
             created: datka,
             lastUpdated: datka
         }
-        for(const key in speedway_rider){
-            match.riders[index][key] = speedway_rider[key]
-        }
+
         match.riders[index].edit = false
-        /*
-        Card_014
-        */
-        match.riders[index] = new SpeedwayRider().updateRiderBirthAttribs(match.riders[index], match.dateOfGame)
+
         await new SpeedwayRider().postNewRider(speedway_rider)
+        .then(() => new SpeedwayRider().getTheLastRider())
+        .then((res) => match.riders[index] = new SpeedwayRider().concatRiderParserWithRiderDB(match.riders[index], [res], match.dateOfGame))
         .then(() => navigate(`/speedwayMatch/${JSON.stringify(match)}`))
 
     }
