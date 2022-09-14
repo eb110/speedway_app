@@ -23,6 +23,7 @@ const Team = (props) => {
             .then((res) => {
                                 if(res){
                                     match[fullNameTag] = res.fullName
+                                    match[homeAway + 'Id'] = res.id
                                     setMatch(Object.assign({}, match))}                                  
                                 else{
                                     match[fullNameTag] = match[homeAway]
@@ -45,9 +46,8 @@ const Team = (props) => {
             lastUpdated: Date.now()
         }
         await new SpeedwayTeam().postNewTeam(newTeam)
-        /*
-        Card_013
-        */
+        .then(() => new SpeedwayTeam().getLastId())
+        .then((res) => match[homeAway + 'id'] = res)
         .then(() => updateMatchComponent(match))
     }
 

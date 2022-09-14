@@ -154,12 +154,12 @@ class ParserLach {
             else if(heat === 5 && point + bonus === 15) {
                 paidPerfect++;
             }
-            riders[i].heat = heat
-            riders[i].pts = point
-            riders[i].bonus = bonus
-            riders[i].match = 1
-            riders[i].fullPerfect = fullPerfect
-            riders[i].paidPerfect = paidPerfect
+            riders[i].heats = heat
+            riders[i].points = point
+            riders[i].bonuses = bonus
+            riders[i].games = 1
+            riders[i].fullPerfects = fullPerfect
+            riders[i].paidPerfects = paidPerfect
         }
         return [result, heats, riders]
     }

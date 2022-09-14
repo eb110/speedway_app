@@ -10,6 +10,8 @@ export default class SpeedwayMatchRider{
         }
     }
 
+   // async postRiderMatches(match, index)
+
     async insertRiderMatch(rdr, homeAway, teamId, matchId, mrId){
         let datka = Date.now();
             let matchRider = {

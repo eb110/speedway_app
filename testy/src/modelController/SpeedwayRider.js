@@ -41,18 +41,31 @@ export default class SpeedwayRider{
         return await this.getAllBySurname(match.riders[index].surname)
         .then((res) => this.concatRiderParserWithRiderDB(match.riders[index], res, match.dateOfGame))
         .then((res) => 
-            {
-                //rider fetched from the rlach is replaced by the rider fetched from the db
-                match.riders[index] = res; 
+            {           
+                match.riders[index] = res;
                 return this.fetchRidersFromDB(match, index - 1)})
     }
 
     concatRiderParserWithRiderDB(rider, riderDB, matchDate){
         riderDB = riderDB.find((rdr) => rdr.name.substring(0, rider.name.length) === rider.name)
         if(riderDB){
+            let numericData = {
+                points: rider.points,
+                bonuses: rider.bonuses,
+                heats: rider.heats,
+                games: rider.games,
+                fullPerfects: rider.fullPerfects,
+                paidPerfects: rider.paidPerfects
+            }
             for(const key in riderDB){
                 rider[key] = riderDB[key]
             }
+            rider.points += numericData.points
+            rider.bonuses += numericData.bonuses
+            rider.heats += numericData.heats
+            rider.games += numericData.games
+            rider.fullPerfects += numericData.fullPerfects
+            rider.paidPerfects += numericData.paidPerfects
             rider = this.updateRiderBirthAttribs(rider, matchDate)
             rider.edit = false
             }

@@ -10,15 +10,13 @@ const SpeedwayMatch = () => {
 
   const navigate = useNavigate()
   const [match, setMatch] = useState(JSON.parse(useParams().matchDetails))
-  const [homeTeam, setHomeTeam] = useState({fullName: match.home, name:match.home})
-  const [awayTeam, setAwayTeam] = useState({fullName: match.away, name: match.away})
   const [message, setMessage] = useState({state:false, msg:''})
 
   useEffect(() => {
 
     const updateRiders = async () => {
-        console.log('db read')
-        await new SpeedwayRider().fetchRidersFromDB(match, match.riders.length - 1).then((res) => setMatch(Object.assign({}, res)))
+        await new SpeedwayRider().fetchRidersFromDB(match, match.riders.length - 1)
+        .then((res) => setMatch(Object.assign({}, res)))
       } 
     
     if(match.fetchRidersFromDB === true){  
@@ -29,11 +27,9 @@ const SpeedwayMatch = () => {
     },[])
 
     const newRider = (riderNumber) => {
-      console.log('db read')
       for(let i = 0; i < match.riders.length; i++){
         if(match.riders[i].nr === riderNumber){
           match.riders[i].edit = true
-          console.log(match.riders[i])
           break
         }
       }
@@ -44,12 +40,26 @@ const SpeedwayMatch = () => {
     Card_013
     */  
     const updateTheMatchFromTeamComponent = (matchFromTeamComponent) => {
-      console.log('db read')
       setMatch(Object.assign({}, matchFromTeamComponent))
     }
     
     const confirmButton = async () => {
 
+      await console.log(match)
+
+      /*
+      let datka = match.dateOfGame.split('-')
+      let datkaWsad = datka[2] + '-' + (datka[1].length === 1 ? '0' + datka[1] : datka[1]) + '-' + (datka[0].length === 1 ? '0' + datka[0] : datka[0]);
+      try{
+        await new SpeedwayMatch().insertMatch(datkaWsad, match.round, match.league)
+        .then(() => new SpeedwayMatch().getLastId())
+        .then((res) => {
+          for()implement recursive call
+        })
+    }catch(error){
+        console.log('new match record failed')
+    }
+      /*
       let awayRds = []
       let homeRds = []
 
@@ -78,6 +88,7 @@ const SpeedwayMatch = () => {
       setMessage({state: true, msg: 'The match has been uploaded'})
 
       new InsertedMatch().insertMatch(match.link)
+      */
 
     }
       

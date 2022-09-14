@@ -2,7 +2,7 @@ export default class SpeedwayMatch{
 
     controller(){}
 
-    async getTheLastMatchId(){
+    async getLastId(){
         try{
           return await fetch(`http://localhost:8080/match/getLastMatchId`).then((res) => res.json())
         }catch(error){
@@ -10,10 +10,9 @@ export default class SpeedwayMatch{
         }
     }
 
-    async insertMatch(id, date, rnd, lg){
+    async insertMatch(date, rnd, lg){
         let datka = Date.now();
         let newMatch = {
-            id: id + 1,
             dateOfMatch: date,
             round: rnd,
             typeOfGame: lg,
@@ -28,7 +27,7 @@ export default class SpeedwayMatch{
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(newMatch)    
-            }).then(() => id + 1)}catch(error){
+            })}catch(error){
                 console.log('add match failed')
             }
       }
