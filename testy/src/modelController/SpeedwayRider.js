@@ -102,7 +102,6 @@ export default class SpeedwayRider{
         }
     }
 
-
     /*
     It happens the rlach source contains mistakes in riders names
     this method consist a list of them and send back the proper name
@@ -119,57 +118,18 @@ export default class SpeedwayRider{
     }
 
     /*
-    The db stores the points as '3,2,2,1'
-    The method receives those points already splited
-    based on this proper points are calculated and sent back
-    as rider properties to add
+        match - global match with updated parameter values
+        all riders already exist in db, same teams
+        index - last index of the match.riders list
     */
-    convertPoints(points){
-        let point = 0;
-        let bonus = 0;
-        let heats = 0;
-        let perfect = 0;
-        let paidPerfect = 0;
-
-        for(let j = 0; j < points.length; j++){
-            let heat = points[j];
-            let pointTemp = 0.0;
-            if(heat.includes("."))
-                pointTemp = parseFloat(heat.substring(0, 3));               
-            if('0123456789'.includes(heat[0]))
-                pointTemp = +("" + heat[0])             
-            if(heat.includes("*"))
-                bonus++;
-            point += pointTemp;
-            heats++;
-        }
-
-        if(heats === 5 && point === 15){
-            perfect++;
-        }
-        else if(heats === 5 && point + bonus === 15) {
-            paidPerfect++;
-        }
-        return{pts: point, bns: bonus, hts: heats, prf: perfect, pdPrf: paidPerfect}
+    async updateRiders(match, index){
+        if(index < 0)
+            return
+        return await this.updateRider(match.riders[index])
+        .then(() => this.updateRiders(match, index - 1))
     }
 
-    /*
-    The method receives data from convertPoints
-    and based on this feeding up the proper rider object
-    */
-    updateRiderScore(rdr, riderScore){
-    //    console.log(riderScore)
-        rdr.points += riderScore.pts
-        rdr.bonuses += riderScore.bns
-        rdr.heats += riderScore.hts
-        rdr.games += 1
-        rdr.fullPerfects += riderScore.prf
-        rdr.paidPerfects += riderScore.pdPrf
-    //    console.log(rdr)
-        return rdr
-    }
-    
-    updateTheRiderInDB = async (rdr) => {
+    updateRider = async (rdr) => {
         let datka = Date.now();
         rdr.lastUpdated = datka
         try{
