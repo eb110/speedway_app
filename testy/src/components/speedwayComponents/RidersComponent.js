@@ -84,7 +84,6 @@ const RidersComponent = (props) => {
                                     margin: '1px'
                                 }}
                             >
-                                {/*card_006*/}
                                 {!rider.birthDate &&
                                 <button
                                     name={rider.nr}
