@@ -34,17 +34,4 @@ export default class SpeedwayTeam{
         }
     }
 
-
-    createNewTeam(id, mask, hfn, afn, hn, an){
-        let datka = Date.now();
-        let team = {
-            id: id,
-            name: mask === 'home' ? hn : an,
-            fullName: mask === 'home' ? hfn : afn,
-            created: datka,
-            lastUpdated: datka
-        }
-        return team
-    }
-
 }

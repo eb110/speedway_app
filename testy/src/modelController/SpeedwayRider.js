@@ -136,7 +136,7 @@ export default class SpeedwayRider{
         let datka = Date.now();
         rdr.lastUpdated = datka
         try{
-           await fetch(`http://localhost:8080/rider/updateRider/${rdr.id}`, {
+           await fetch(`http://localhost:8080/rider/updateRider`, {
                method: 'PUT',
                headers: {
                    'Accept': 'application/json',
@@ -144,7 +144,7 @@ export default class SpeedwayRider{
                },
                body: JSON.stringify(rdr)        
            });
-           console.log('speedway rider record updated')
+           console.log('speedway rider update')
        }catch(error){
         console.log('update rider failed')
        }

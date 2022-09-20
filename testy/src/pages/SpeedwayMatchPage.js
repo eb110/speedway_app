@@ -36,17 +36,14 @@ const SpeedwayMatchPage = () => {
       }
       navigate(`/newRider/${JSON.stringify(match)}`)
       }
-
-    /*
-    Card_013
-    */  
-    const updateTheMatchFromTeamComponent = (matchFromTeamComponent) => {
-      setMatch(Object.assign({}, matchFromTeamComponent))
+ 
+    const updateTheMatchFromTeamComponent = (homeAway, Id) => {
+      match[homeAway + 'Id'] = Id
+      setMatch(Object.assign({}, match))
     }
     
     const confirmButton = async () => {
 
-      await console.log(match)   
       let datka = match.dateOfGame.split('-')
       let datkaWsad = datka[2] + '-' + (datka[1].length === 1 ? '0' + datka[1] : datka[1]) + '-' + (datka[0].length === 1 ? '0' + datka[0] : datka[0]);
       try{

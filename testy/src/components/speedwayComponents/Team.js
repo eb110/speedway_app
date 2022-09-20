@@ -47,8 +47,7 @@ const Team = (props) => {
         }
         await new SpeedwayTeam().postNewTeam(newTeam)
         .then(() => new SpeedwayTeam().getLastId())
-        .then((res) => match[homeAway + 'id'] = res)
-        .then(() => updateMatchComponent(match))
+        .then((res) => updateMatchComponent(homeAway, res))
     }
 
     return (

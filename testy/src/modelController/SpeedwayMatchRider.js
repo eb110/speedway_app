@@ -27,9 +27,9 @@ export default class SpeedwayMatchRider{
         let datka = Date.now();
             let matchRider = {
                 homeAwaySide: rider.homeAway,
-                fkIdRider: rider.id,
-                fkIdTeam: teamId,
-                fkIdMatch: matchId,
+                fk_SpeedwayRider_SpeedwayMatchRider: rider.id,
+                fk_SpeedwayTeam_SpeedwayMatchRider: teamId,
+                fk_SpeedwayMatch_SpeedwayMatchRider: matchId,
                 riderMatchNumber: rider.nr,
                 pkt: rider.pointsString,
                 created: datka,
