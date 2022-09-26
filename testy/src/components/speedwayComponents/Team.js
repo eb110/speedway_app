@@ -28,7 +28,7 @@ const Team = (props) => {
                                 else{
                                     match[fullNameTag] = match[homeAway]
                                     setRenderTeamInput(true)
-                                }})
+                                }})                                               
     }
 
     const handleInputTeamChange = (event) => {
