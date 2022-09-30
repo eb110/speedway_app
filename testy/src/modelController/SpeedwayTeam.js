@@ -28,7 +28,15 @@ export default class SpeedwayTeam{
     async getByName(name){
         try{
             return await fetch(`http://localhost:8080/team/getByName/${name}`)
-            .then((res) => res.json())
+            .then((res) => {
+                if(res.status === 200){
+                    return res.json()
+                }
+                else{
+                    console.log('the team: ' + name + ' record doesnt exist')
+                    return null
+                }
+            })
         }catch(error){
             console.log('get team by name has failed')
         }

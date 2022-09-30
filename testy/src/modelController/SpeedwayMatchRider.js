@@ -18,14 +18,12 @@ export default class SpeedwayMatchRider{
     async postMatchRiders(match, index){
         if(index < 0)
             return
-        let teamId = match.riders[index].homeAway === 'away' ? match.awayId : match.homeId
-        return await this.insertRiderMatch(match.riders[index], teamId, match.matchId)
+        let team = match.riders[index].homeAway === 'away' ? match.awayTeam : match.homeTeam
+        return await this.insertRiderMatch(match.riders[index], team, match.match)
         .then(() => this.postMatchRiders(match, index - 1))
     }
 
-    async insertRiderMatch(rider, teamId, matchId){
-        let team = {id: teamId}
-        let match = {id: matchId}
+    async insertRiderMatch(rider, team, match){
         let datka = Date.now();
             let matchRider = {
                 homeAwaySide: rider.homeAway,

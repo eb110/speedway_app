@@ -37,8 +37,8 @@ const SpeedwayMatchPage = () => {
       navigate(`/newRider/${JSON.stringify(match)}`)
       }
  
-    const updateTheMatchFromTeamComponent = (homeAway, Id) => {
-      match[homeAway + 'Id'] = Id
+    const updateTheMatchFromTeamComponent = (homeAway, team) => {
+      match[homeAway + "Team"] = team
       setMatch(Object.assign({}, match))
     }
     
@@ -48,8 +48,8 @@ const SpeedwayMatchPage = () => {
       let datkaWsad = datka[2] + '-' + (datka[1].length === 1 ? '0' + datka[1] : datka[1]) + '-' + (datka[0].length === 1 ? '0' + datka[0] : datka[0]);
       try{
         await new SpeedwayMatch().insertMatch(datkaWsad, match.round, match.league)
-        .then(() => new SpeedwayMatch().getLastId())
-        .then((res) => {match.matchId = res; return})
+        .then(() => new SpeedwayMatch().getLastMatch())
+        .then((res) => {match.match = res; return})
         .then(() => new SpeedwayMatchRider().postMatchRiders(match, match.riders.length - 1))
         .then(() => new SpeedwayRider().updateRiders(match, match.riders.length - 1))
         .then(() => {new InsertedMatch().insertMatch(match.link); setMessage({state: true, msg: 'The match has been uploaded'})})

@@ -91,7 +91,6 @@ const NewRiderComponent = (props) => {
         await new SpeedwayRider().postNewRider(speedway_rider)
         .then(() => new SpeedwayRider().getTheLastRider())
         .then((res) => match.riders[index] = new SpeedwayRider().concatRiderParserWithRiderDB(match.riders[index], [res], match.dateOfGame))
-        .then(() => console.log(match.riders[index]))
         .then(() => navigate(`/speedwayMatch/${JSON.stringify(match)}`))
 
     }

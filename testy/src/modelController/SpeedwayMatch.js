@@ -10,6 +10,14 @@ export default class SpeedwayMatch{
         }
     }
 
+    async getLastMatch(){
+        try{
+          return await fetch(`http://localhost:8080/match/getLastMatch`).then((res) => res.json())
+        }catch(error){
+            console.log("get last match was a failure")
+        }
+    }
+
     async insertMatch(date, rnd, lg){
         let datka = Date.now();
         let newMatch = {

@@ -5,7 +5,15 @@ export default class SpeedwayRider{
     getTheRiderById = async (id) => {
         try{
             return await fetch(`http://localhost:8080/rider/getById/${id}`)
-            .then((res) => res.json())
+            .then((res) => {
+                if(res.status === 200){
+                    return res.json()
+                }
+                else{
+                    console.log('the rider of id: ' + id + ' doesnt exist in db')
+                    return null
+                }
+            })
           } catch(err){
               console.log('get rider by id has failed')
           }
