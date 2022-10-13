@@ -71,9 +71,9 @@ export default class SpeedwayRider{
             rider.points += numericData.points
             rider.pointsCurrent = numericData.points
             rider.bonuses += numericData.bonuses
-            rider.bonusesCurrent += numericData.bonuses
+            rider.bonusesCurrent = numericData.bonuses
             rider.heats += numericData.heats
-            rider.heatsCurrent += numericData.heats
+            rider.heatsCurrent = numericData.heats
             rider.games += numericData.games
             rider.fullPerfects += numericData.fullPerfects
             rider.paidPerfects += numericData.paidPerfects

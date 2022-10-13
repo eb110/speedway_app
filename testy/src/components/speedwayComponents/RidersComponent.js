@@ -1,7 +1,6 @@
 
 
 import React, {useEffect, useState} from 'react';
-import RiderPoints from './RiderPoints';
 import Polska from '../../public/img/flags/Polska.svg';
 import Szwecja from '../../public/img/flags/Szwecja.svg';
 import Anglia from '../../public/img/flags/Anglia.svg';
@@ -104,8 +103,43 @@ const RidersComponent = (props) => {
                         key={key++}
                     >
                         {rider.pointsString}
-
                     </div>
+                    <div 
+                        style={{
+                            display: 'inline-block', 
+                            width: "6%",
+                            border: '1px solid blue',
+                            textAlign: 'left',
+                            paddingLeft: '5px',
+                            margin: '1px'}}
+                        key={key++}
+                    >
+                        Pts: {rider.pointsCurrent}
+                    </div>
+                    <div 
+                        style={{
+                            display: 'inline-block', 
+                            width: "5%",
+                            border: '1px solid blue',
+                            textAlign: 'left',
+                            paddingLeft: '5px',
+                            margin: '1px'}}
+                        key={key++}
+                    >
+                        Bg: {rider.heatsCurrent}
+                    </div>
+                    <div 
+                        style={{
+                            display: 'inline-block', 
+                            width: "5%",
+                            border: '1px solid blue',
+                            textAlign: 'left',
+                            paddingLeft: '5px',
+                            margin: '1px'}}
+                        key={key++}
+                    >
+                        Bns: {rider.bonusesCurrent}
+                    </div>       
                 </div>                
             ))}             
             </div>     
