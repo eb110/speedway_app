@@ -12,8 +12,12 @@ const SpeedwayMatchPage = () => {
   const navigate = useNavigate()
   const [match, setMatch] = useState(JSON.parse(useParams().matchDetails))
   const [message, setMessage] = useState({state:false, msg:''})
+  const [messageResultCalc, setMessageResultCalc] = useState({state:false, msg:''})
+  //console.log(match)
 
   useEffect(() => {
+
+  calculateResultReliability()
 
     const updateRiders = async () => {
         await new SpeedwayRider().fetchRidersFromDB(match, match.riders.length - 1)
@@ -40,6 +44,14 @@ const SpeedwayMatchPage = () => {
     const updateTheMatchFromTeamComponent = (homeAway, team) => {
       match[homeAway + "Team"] = team
       setMatch(Object.assign({}, match))
+    }
+
+    const calculateResultReliability = () => {
+      const pts = match.awayResultPoints + match.homeResultPoints
+      const bg = match.awayHeats + match.homeHeats
+      if(pts !== 90 || bg !== 60){
+        setMessageResultCalc({state:true, msg: 'CHECK THE RESULT: Points: ' + pts + ' Heats: ' + bg})
+      }
     }
     
     const confirmButton = async () => {
@@ -95,6 +107,11 @@ const SpeedwayMatchPage = () => {
         <div>
           {message.state &&
             message.msg
+          }
+        </div>
+        <div>
+          {messageResultCalc.state &&
+            messageResultCalc.msg
           }
         </div>
       </div>
