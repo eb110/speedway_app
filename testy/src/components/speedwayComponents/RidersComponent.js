@@ -97,7 +97,7 @@ const RidersComponent = (props) => {
                     <div 
                         style={{
                             display: 'inline-block', 
-                            width: "10%",
+                            width: "12%",
                             border: '1px solid blue',
                             textAlign: 'left',
                             paddingLeft: '5px',

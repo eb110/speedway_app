@@ -13,7 +13,7 @@ const Team = (props) => {
     const fullNameTag = homeAway === 'away' ? 'fullAwayName' : 'fullHomeName'
   
     useEffect(() => {
-        if(match[fullNameTag] === undefined){
+        if(match[fullNameTag] === undefined || !match[fullNameTag].includes(' ')){
             fetchTeamName()
         }        
     },[])
