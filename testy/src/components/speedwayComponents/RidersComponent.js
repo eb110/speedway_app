@@ -1,6 +1,6 @@
 
 
-import React, {useEffect, useState} from 'react';
+//import React, {useEffect, useState} from 'react';
 import Polska from '../../public/img/flags/Polska.svg';
 import Szwecja from '../../public/img/flags/Szwecja.svg';
 import Anglia from '../../public/img/flags/Anglia.svg';
@@ -26,6 +26,8 @@ const RidersComponent = (props) => {
     let newRider = props.createNewRider
     let ha = props.homeAway
     let riders = ha === 'away' ? match.riders.filter((rider) => rider.homeAway === 'away') : match.riders.filter((rider) => rider.homeAway === 'home')
+
+    //console.log(riders)
 
     let flag = {'Polska': Polska, 'Szwecja': Szwecja, 'Anglia': Anglia, 'Norwegia': Norwegia, 'Australia': Australia, 'Łotwa': Łotwa, 
     'Niemcy': Niemcy, 'Rosja': Rosja, 'Dania': Dania, 'Ukraina': Ukraina, 'Czechy': Czechy, 'Węgry': Węgry, 'Słowacja': Słowacja, 
@@ -103,6 +105,7 @@ const RidersComponent = (props) => {
                         key={key++}
                     >
                         {rider.pointsString}
+                        {rider.perfect && <b> X</b>}
                     </div>
                     <div 
                         style={{
