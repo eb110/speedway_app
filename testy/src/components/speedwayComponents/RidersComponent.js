@@ -27,8 +27,6 @@ const RidersComponent = (props) => {
     let ha = props.homeAway
     let riders = ha === 'away' ? match.riders.filter((rider) => rider.homeAway === 'away') : match.riders.filter((rider) => rider.homeAway === 'home')
 
-    //console.log(riders)
-
     let flag = {'Polska': Polska, 'Szwecja': Szwecja, 'Anglia': Anglia, 'Norwegia': Norwegia, 'Australia': Australia, 'Łotwa': Łotwa, 
     'Niemcy': Niemcy, 'Rosja': Rosja, 'Dania': Dania, 'Ukraina': Ukraina, 'Czechy': Czechy, 'Węgry': Węgry, 'Słowacja': Słowacja, 
     'Słowenia': Słowenia, 'Francja': Francja, 'Bułgaria': Bułgaria, 'USA': USA, 'Nowa Zelandia': Nowa_Zelandia}

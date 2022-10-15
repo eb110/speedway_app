@@ -5,6 +5,7 @@ const Team = (props) => {
 
     const [match, setMatch] = useState(props.match)
     const updateMatchComponent = props.updateMatchComponent;
+    const updateMatchConfirm = props.updateTeamConfirm
     const [renderTeamInput, setRenderTeamInput] = useState(false)
     const homeAway = props.homeAway 
     const side = homeAway === "away" ? 'GOŚCIE' : 'GOSPODARZE'
@@ -21,7 +22,8 @@ const Team = (props) => {
     const fetchTeamName = async () => {
             await new SpeedwayTeam().getByName(match[homeAway])
             .then((res) => {
-                                if(res){
+                                if(res){  
+                                    updateMatchConfirm(homeAway)                      
                                     match[fullNameTag] = res.fullName
                                     match[homeAway + 'Id'] = res.id
                                     match[homeAway + "Team"] = res
@@ -38,7 +40,8 @@ const Team = (props) => {
         setMatch(Object.assign({}, match))
     }
 
-    const updateTeam = async () => {
+    const updateTeam = async () => {  
+        updateMatchConfirm(homeAway)     
         setRenderTeamInput(false)
         let newTeam = {
             name: match[homeAway],

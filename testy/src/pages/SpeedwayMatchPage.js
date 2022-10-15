@@ -13,7 +13,7 @@ const SpeedwayMatchPage = () => {
   const [match, setMatch] = useState(JSON.parse(useParams().matchDetails))
   const [message, setMessage] = useState({state:false, msg:''})
   const [messageResultCalc, setMessageResultCalc] = useState({state:false, msg:''})
-  //console.log(match)
+  const [confirmMatch, setConfirmMatch] = useState(false)
 
   useEffect(() => {
 
@@ -28,9 +28,10 @@ const SpeedwayMatchPage = () => {
       updateRiders()
       match.fetchRidersFromDB = false
     }
+    confirmMatchFunction()
 
     },[])
-
+    
     const newRider = (riderNumber) => {
       for(let i = 0; i < match.riders.length; i++){
         if(match.riders[i].nr === riderNumber){
@@ -44,6 +45,19 @@ const SpeedwayMatchPage = () => {
     const updateTheMatchFromTeamComponent = (homeAway, team) => {
       match[homeAway + "Team"] = team
       setMatch(Object.assign({}, match))
+    }
+
+    const confirmMatchFunction = () => {
+      if(match.riders.some(x => x.edit === undefined))
+        return
+      if(match.homeConfirmed && match.awayConfirmed){
+        setConfirmMatch(true)
+      }
+    }
+
+    const updateConfirmTeams = (homeAway) => {
+      match[homeAway + "Confirmed"] = true;
+      confirmMatchFunction()
     }
 
     const calculateResultReliability = () => {
@@ -81,6 +95,7 @@ const SpeedwayMatchPage = () => {
           match={match}
           homeAway={'away'}
           updateMatchComponent={updateTheMatchFromTeamComponent}
+          updateTeamConfirm={updateConfirmTeams}
         />    
       </div>
         <RidersComponent
@@ -93,6 +108,7 @@ const SpeedwayMatchPage = () => {
           match={match}
           homeAway={'home'}
           updateMatchComponent={updateTheMatchFromTeamComponent}
+          updateTeamConfirm={updateConfirmTeams}
         />  
       </div>
         <RidersComponent
@@ -100,10 +116,13 @@ const SpeedwayMatchPage = () => {
           homeAway='home'
           createNewRider={newRider}
       />
+     
       <div>
+      {confirmMatch &&
         <button
           onClick={confirmButton}
         >Confirm</button>
+      }
         <div>
           {message.state &&
             message.msg

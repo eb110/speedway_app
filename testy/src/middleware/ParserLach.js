@@ -24,6 +24,8 @@ class ParserLach {
         this.homeResultPoints = 0.0
         this.awayHeats = 0
         this.homeHeats = 0
+        this.homeConfirmed = false
+        this.awayConfirmed = false
         this.roundAndLeagueParser()
         this.teamsNamesParser()
         this.dateOfGameParser()
