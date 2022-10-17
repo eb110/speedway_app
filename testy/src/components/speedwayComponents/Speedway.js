@@ -21,13 +21,14 @@ const Speedway = () => {
 
     const updateRiders = async () => {
         await new SpeedwayRider().fetchRidersFromDB(match, match.riders.length - 1)
-        .then((res) => setMatch(Object.assign({}, res)))
+        .then((res) => setMatch(Object.assign({}, res))).then(() => confirmMatchFunction())
       } 
     
     if(match.fetchRidersFromDB === true){  
       updateRiders()
       match.fetchRidersFromDB = false
     }
+
     confirmMatchFunction()
 
     },[])
