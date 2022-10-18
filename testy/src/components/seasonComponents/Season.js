@@ -1,7 +1,17 @@
+import { Link } from 'react-router-dom';
+
 const Season = (props) => {
-    const year = props.rok
+    const rok = props.rok
+    let wsad = JSON.stringify({year: rok, liga: 'top'})
     return (
-        <div>{year}</div>
+        <div>
+            <div>{rok}</div>
+            <Link to={{pathname: `/league/${wsad}`}}
+            >
+                Top League
+            </Link>
+        </div>
+
     )
 }
 
