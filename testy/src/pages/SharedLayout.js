@@ -3,11 +3,7 @@ import StyledNavbar from '../components/StyledNavbar'
 
 const Home = () => {
   return (
-    <>
-      <StyledNavbar />
-
-      <Outlet />
-    </>
+   <Outlet />
   );
 };
 
