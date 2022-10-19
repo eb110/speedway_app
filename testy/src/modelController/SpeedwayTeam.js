@@ -10,6 +10,14 @@ export default class SpeedwayTeam{
           }
     }
 
+    async getAllTeams(){
+        try{
+            return await fetch(`http://localhost:8080/team/getAllTeams`).then((res) => res.json())
+          }catch(error){
+              console.log("can't get teams")
+          }
+    }
+
     async postNewTeam(team){
         try{
         return await fetch(`http://localhost:8080/team/addTeam`, {

@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 const Season = (props) => {
     const rok = props.rok
-    let wsad = JSON.stringify({year: rok, liga: 'top'})
+    let wsad = JSON.stringify({year: rok, liga: 'topLeague'})
     return (
         <div>
             <div>{rok}</div>
