@@ -3,7 +3,6 @@ import FetchComponent from "../components/FetchComponent";
 
 const FetchRlach = () => {
     const {rlachLink} = useParams();
-
     return (
 
       <div
@@ -13,7 +12,7 @@ const FetchRlach = () => {
           border: '1px solid red'}}
       >
         <FetchComponent 
-          rlachLink={rlachLink}
+          rlachLink={JSON.parse(rlachLink)}
         />
       </div>
      

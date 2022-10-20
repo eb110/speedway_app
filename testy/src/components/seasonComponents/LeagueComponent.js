@@ -104,8 +104,12 @@ const LeagueComponent = (props) => {
     }
 
     const confirmSeasonGame = (event, link) => {
-        link = link.replaceAll('/', '*')
-        navigate(`/fetch/${link}`)
+        const data = {
+            year: rok,
+            league: liga,
+            link: link.replaceAll('/', '*')
+        }
+        navigate(`/fetch/${JSON.stringify(data)}`)
     }
 
     useEffect(() => {

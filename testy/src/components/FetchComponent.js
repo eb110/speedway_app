@@ -10,9 +10,10 @@
             const [axiosUrl, setAxiosUrl] = useState('')
             const [message, setMessage] = useState({state:false, msg:''})
 
-            const link = props.rlachLink.replaceAll('*', '/')
+            let leagueData = props.rlachLink
+            leagueData.link = leagueData.link.replaceAll('*', '/')
 
-            const [inputValue, setInputValue] = useState(link)
+            const [inputValue, setInputValue] = useState(leagueData.link)
 
             const navigate = useNavigate()
 
@@ -32,7 +33,12 @@
                             .then((res) => new EncoderLatin(res.data))
                             .then((enc) => JSON.stringify(new ParserLach(enc.str)))
                             .then((res) => new InsertedMatch().addLinkToMatchJson(axiosUrl, res))
-                            .then((parameter) => navigate(`/speedwayMatch/${parameter}`))
+                            .then((parameter) => {
+                                let tempParameter = JSON.parse(parameter)
+                                tempParameter.year = leagueData.year; 
+                                tempParameter.league = leagueData.league; 
+                                navigate(`/speedwayMatch/${JSON.stringify(tempParameter)}`)
+                            })
 
                         } catch(error){
                             console.log('cant read the url')
