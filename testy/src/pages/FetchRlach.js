@@ -1,6 +1,8 @@
+import {useParams} from 'react-router-dom'
 import FetchComponent from "../components/FetchComponent";
 
-const FetchRLach = () => {
+const FetchRlach = () => {
+    const {rlachLink} = useParams();
 
     return (
 
@@ -10,10 +12,12 @@ const FetchRLach = () => {
           padding: '15px',
           border: '1px solid red'}}
       >
-        <FetchComponent />
+        <FetchComponent 
+          rlachLink={rlachLink}
+        />
       </div>
      
     );
   };
 
-  export default FetchRLach;
+  export default FetchRlach;

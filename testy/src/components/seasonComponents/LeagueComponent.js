@@ -1,34 +1,65 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom'
+import SeasonGames from '../../modelController/SeasonGames';
 import SeasonModel from '../../modelController/SeasonModel';
 import SpeedwayTeam from "../../modelController/SpeedwayTeam"
 
 const LeagueComponent = (props) => {
     const rok = props.leagueDetails.year
     const liga = props.leagueDetails.liga
+    const navigate = useNavigate()
 
     let key = 1
+    const [season, setSeason] = useState('')
     const [teams, setTeams] = useState([])
     const [newTeam, setNewTeam] = useState('')
     const [pickTeams, setPickTeams] = useState(false)
+    const [displaySeason, setDisplaySeason] = useState(false)
+    const [seasonGames, setSeasonGames] = useState([])
 
     const handleCheckbox = (event) => {
-        console.log('checkbox working fine')
-        console.log(event.target.value)}
+        let tempName = event.target.value
+        for (let i = 0; i < teams.length; i++) {
+            if (teams[i].name === tempName) {
+                teams[i].check = (teams[i].check === undefined || teams[i].check === false) ? true : false
+                break
+            }
+        }
+    }
 
     const fetchTeams = async () => {
         await new SpeedwayTeam().getAllTeams()
             .then((res) => { console.log(res); setTeams(res) })
-            .then((res) => setPickTeams(true))}
+            .then((res) => { setDisplaySeason(false); setPickTeams(true); })
+    }
 
-    const fetchSeason = async(year) => {
+    const fetchSeason = async (year) => {
         await new SeasonModel().getSeasonByYear(year)
-        .then((res) => {
-            if(res !== null && res[liga] === false){
-                fetchTeams()}})}
+            .then((res) => {
+                if (res !== null) {
+                    setSeason(res)
+                    if (res[liga] === false) {
+                        fetchTeams();
+                    }
+                    else {
+                        setPickTeams(false)
+                        setDisplaySeason(true)
+                        fetchSeasonGames(res.id)
+                    }
+                }
+            })
+    }
+
+    const fetchSeasonGames = async (seasonId) => {
+        await new SeasonGames().getAllBySeasonId(seasonId)
+            .then((res) => new SeasonGames().prepareRlachLinkElements(res, rok))
+            .then((res) => setSeasonGames(res))
+    }
 
     const handleInputTeamChange = (event) => {
         const { value } = event.target;
-        setNewTeam(value)}
+        setNewTeam(value)
+    }
 
     const insertTeam = async () => {
         let tempName = newTeam.split(' ')[1]
@@ -40,12 +71,42 @@ const LeagueComponent = (props) => {
         }
         setNewTeam('')
         let tempTeams = []
-        for(let i = 0; i < teams.length; i++)
+        for (let i = 0; i < teams.length; i++)
             tempTeams.push(teams[i])
         tempTeams.push(addTeam)
         setTeams(tempTeams)
         await new SpeedwayTeam().postNewTeam(addTeam)
-            .then(() => new SpeedwayTeam().getLastId())}
+            .then((res) => console.log(addTeam))
+    }
+
+    const confirmSeason = (event) => {
+        console.log('season id: ' + season.id)
+        let check = teams.filter((team) => team.check === true)
+        let teamPairs = []
+        let datka = Date.now();
+        for (let i = 0; i < check.length; i++) {
+            for (let j = 0; j < check.length; j++) {
+                if (i !== j) {
+                    teamPairs.push({
+                        level: liga,
+                        home: check[i].name,
+                        away: check[j].name,
+                        inserted: false,
+                        created: datka,
+                        lastUpdated: datka,
+                        season: season
+                    })
+                    console.log('teamPairs: ' + teamPairs[0].season.id)
+                }
+            }
+        }
+        new SeasonGames().postSeasonsGames(teamPairs, teamPairs.length - 1)
+    }
+
+    const confirmSeasonGame = (event, link) => {
+        link = link.replaceAll('/', '*')
+        navigate(`/fetch/${link}`)
+    }
 
     useEffect(() => {
         console.log('league component db read')
@@ -56,28 +117,55 @@ const LeagueComponent = (props) => {
         <div>
             <div>{liga}</div>
             <div>{rok}</div>
-            {setPickTeams && 
-            <div>
-            {teams.map((team) => (
-                <div
-                    key={key++ + 'teamLeagueComponent'}
-                >
-                    {team.fullName}
-                    <input onChange={handleCheckbox} type="checkbox" name={liga} value={team.name} />
-                </div>
-            ))}
-            <div>
-                <input
-                    style={{ width: "20%" }}
-                    value={newTeam}
-                    onChange={handleInputTeamChange}
-                />
-                <button
-                    name='newTeamButton'
-                    onClick={event => insertTeam(event)}
-                >New Team</button>
-            </div>
-            </div>}
+
+            {pickTeams &&
+                <div>
+                    <div>
+                        <input
+                            style={{ width: "20%" }}
+                            value={newTeam}
+                            onChange={handleInputTeamChange}
+                        />
+                        <button
+                            name='newTeamButton'
+                            onClick={event => insertTeam(event)}
+                        >New Team</button>
+                    </div>
+                    {teams.map((team) => (
+                        <div
+                            key={key++ + 'teamLeagueComponent'}
+                        >
+                            {team.fullName}
+                            <input onChange={handleCheckbox} type="checkbox" name={liga} value={team.name} />
+                        </div>
+                    ))}
+
+                    <div>
+                        <button
+                            name='confirmSeason'
+                            onClick={event => confirmSeason(event)}
+                        >Confirm Season</button>
+                    </div>
+                </div>}
+
+            {displaySeason &&
+                <div>
+                    {seasonGames.map((seasonGame) => (
+                        <div
+                            key={key++ + 'teamLeagueComponent'}
+                        >
+                            <div
+                                key={key++ + 'seasonGame'}
+                            >
+                                {seasonGame.home} - {seasonGame.away}&nbsp;
+                                <button
+                                    name='confirmSeasonGame'
+                                    onClick={event => confirmSeasonGame(event, seasonGame.link)}
+                                >Confirm Season Game</button>
+                            </div>
+                        </div>
+                    ))}
+                </div>}
         </div>)
 }
 

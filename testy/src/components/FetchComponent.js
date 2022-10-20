@@ -5,11 +5,14 @@
         import { useNavigate } from 'react-router-dom';
         import InsertedMatch from '../modelController/InsertedMatch';
 
-        const FetchComponent = () => {
+        const FetchComponent = (props) => {
 
-            const [inputValue, setInputValue] = useState('')
             const [axiosUrl, setAxiosUrl] = useState('')
             const [message, setMessage] = useState({state:false, msg:''})
+
+            const link = props.rlachLink.replaceAll('*', '/')
+
+            const [inputValue, setInputValue] = useState(link)
 
             const navigate = useNavigate()
 
