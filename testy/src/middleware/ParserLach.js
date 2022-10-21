@@ -92,7 +92,8 @@ class ParserLach {
         else{
             base = this.data.substring(this.data.indexOf('<br>\n    ') + 9, this.data.indexOf('<br><br>'))
         }
-        base = base.split('<br>\r\n    ').filter(x => x.includes('(')) 
+        base = base.replaceAll('(G)', '')
+        base = base.split('<br>\r\n    ').filter(x => x.includes('('))      
         for(let i = 0; i < base.length; i++){
             let wsad = base[i]
             let rider = {}
