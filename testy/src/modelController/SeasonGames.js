@@ -46,6 +46,9 @@ export default class SeasonGames {
             for (let i = 0; i < seasonGames.length; i++) {
                 seasonGames[i].rlachHome = seasonGames[i].home.substring(0, 2).toLowerCase()
                 seasonGames[i].rlachAway = seasonGames[i].away.substring(0, 2).toLowerCase()
+                //zielona góra case
+                seasonGames[i].rlachAway = seasonGames[i].rlachAway === 'zi' ? 'zg' : seasonGames[i].rlachAway
+                seasonGames[i].rlachHome = seasonGames[i].rlachHome === 'zi' ? 'zg' : seasonGames[i].rlachHome
                 seasonGames[i].rlachLeague = seasonGames[i].level === 'topLeague' ? '_1.htm' : 'next choice'
                 seasonGames[i].rlachDomain = seasonGames[i].level === 'topLeague' ? 'http://www.speedwayw.pl/dmp/' : 'next choice'
                 seasonGames[i].link = seasonGames[i].rlachDomain + year + '/' + seasonGames[i].rlachHome + seasonGames[i].rlachAway + seasonGames[i].rlachLeague
