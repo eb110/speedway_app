@@ -109,7 +109,7 @@ class ParserLach {
             //as there is an issue with '/-' during the render
             //if rider has had an accident and has been replaced then the 'z' letter
             //is provided
-            rider.pointsString = rider.pointsString.replaceAll('/-', 'z')
+            rider.pointsString = rider.pointsString.replaceAll('/', 'z')
             arr.push(rider)    
         }
     }
