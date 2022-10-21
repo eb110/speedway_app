@@ -19,7 +19,24 @@ export default class SeasonModel {
         }
     }
 
-    async getSeasonByYear(year) {
+    async updateSeasonLeagueState(seasonId, league){
+        //topLeague
+        let sn = {id: seasonId}
+        try {
+            await fetch(`http://localhost:8080/season/updateSeason${league}`, {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(sn)
+            });
+        } catch (error) {
+            console.log('update of the season ' + league + ' has failed')
+        }
+    }
+
+    async getSeasonByYear(year) { 
         try {
             return await fetch(`http://localhost:8080/season/getSeasonByYear/${year}`)
                 .then((res) => {

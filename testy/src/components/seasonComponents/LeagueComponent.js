@@ -16,6 +16,7 @@ const LeagueComponent = (props) => {
     const [pickTeams, setPickTeams] = useState(false)
     const [displaySeason, setDisplaySeason] = useState(false)
     const [seasonGames, setSeasonGames] = useState([])
+    const [confirm, setConfirm] = useState(false)
 
     const handleCheckbox = (event) => {
         let tempName = event.target.value
@@ -29,7 +30,7 @@ const LeagueComponent = (props) => {
 
     const fetchTeams = async () => {
         await new SpeedwayTeam().getAllTeams()
-            .then((res) => { console.log(res); setTeams(res) })
+            .then((res) => { setTeams(res) })
             .then((res) => { setDisplaySeason(false); setPickTeams(true); })
     }
 
@@ -80,7 +81,6 @@ const LeagueComponent = (props) => {
     }
 
     const confirmSeason = (event) => {
-        console.log('season id: ' + season.id)
         let check = teams.filter((team) => team.check === true)
         let teamPairs = []
         let datka = Date.now();
@@ -96,15 +96,17 @@ const LeagueComponent = (props) => {
                         lastUpdated: datka,
                         season: season
                     })
-                    console.log('teamPairs: ' + teamPairs[0].season.id)
                 }
             }
         }
         new SeasonGames().postSeasonsGames(teamPairs, teamPairs.length - 1)
+        .then((res) => new SeasonModel().updateSeasonLeagueState(season.id, liga))
+        .then((res) => setConfirm(true))
     }
 
-    const confirmSeasonGame = (event, link) => {
+    const confirmSeasonGame = (event, link, gameId) => {
         const data = {
+            seasonGameId: gameId,
             year: rok,
             league: liga,
             link: link.replaceAll('/', '*')
@@ -115,7 +117,7 @@ const LeagueComponent = (props) => {
     useEffect(() => {
         console.log('league component db read')
         fetchSeason(rok)
-    }, [])
+    }, [confirm])
 
     return (
         <div>
@@ -162,10 +164,11 @@ const LeagueComponent = (props) => {
                                 key={key++ + 'seasonGame'}
                             >
                                 {seasonGame.home} - {seasonGame.away}&nbsp;
-                                <button
-                                    name='confirmSeasonGame'
-                                    onClick={event => confirmSeasonGame(event, seasonGame.link)}
-                                >Confirm Season Game</button>
+                                {!seasonGame.inserted &&
+                                    <button
+                                        name='confirmSeasonGame'
+                                        onClick={event => confirmSeasonGame(event, seasonGame.link, seasonGame.id)}
+                                    >Confirm Season Game</button>}
                             </div>
                         </div>
                     ))}

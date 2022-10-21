@@ -6,6 +6,7 @@ import InsertedMatch from '../../modelController/InsertedMatch';
 import Team from './Team';
 import SpeedwayMatchRider from '../../modelController/SpeedwayMatchRider';
 import SpeedwayMatch from '../../modelController/SpeedwayMatch';
+import SeasonGames from '../../modelController/SeasonGames';
 
 const Speedway = () => {
 
@@ -80,6 +81,7 @@ const Speedway = () => {
         .then(() => new SpeedwayMatchRider().postMatchRiders(match, match.riders.length - 1))
         .then(() => new SpeedwayRider().updateRiders(match, match.riders.length - 1))
         .then(() => { new InsertedMatch().insertMatch(match.link); setMessage({ state: true, msg: 'The match has been uploaded' }) })
+        .then(() => new SeasonGames().updateInsertedStateToTrue(match.seasonGameId))
       //to do -> update riders
     } catch (error) {
       console.log('confirm of the match results failed')

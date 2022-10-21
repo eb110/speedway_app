@@ -36,7 +36,8 @@
                             .then((parameter) => {
                                 let tempParameter = JSON.parse(parameter)
                                 tempParameter.year = leagueData.year; 
-                                tempParameter.league = leagueData.league; 
+                                tempParameter.league = leagueData.league;
+                                tempParameter.seasonGameId = leagueData.seasonGameId; 
                                 navigate(`/speedwayMatch/${JSON.stringify(tempParameter)}`)
                             })
 
