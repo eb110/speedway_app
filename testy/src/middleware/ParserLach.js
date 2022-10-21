@@ -71,8 +71,8 @@ class ParserLach {
         let base = this.data.substring(this.data.indexOf('<title>') + 7, this.data.indexOf('</title>'))
         this.data = this.data.substring(this.data.indexOf(':') + 1)
         this.home = base.split(' - ')
-        this.away = this.home[1]
-        this.home = this.home[0]
+        this.away = this.home[1].split(' ')[0]
+        this.home = this.home[0].split(' ')[0]
     }
 
     dateOfGameParser(){
