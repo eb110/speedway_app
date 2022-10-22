@@ -100,8 +100,8 @@ const LeagueComponent = (props) => {
             }
         }
         new SeasonGames().postSeasonsGames(teamPairs, teamPairs.length - 1)
-        .then((res) => new SeasonModel().updateSeasonLeagueState(season.id, liga))
-        .then((res) => setConfirm(true))
+            .then((res) => new SeasonModel().updateSeasonLeagueState(season.id, liga))
+            .then((res) => setConfirm(true))
     }
 
     const confirmSeasonGame = (event, link, gameId) => {
@@ -112,6 +112,10 @@ const LeagueComponent = (props) => {
             link: link.replaceAll('/', '*')
         }
         navigate(`/fetch/${JSON.stringify(data)}`)
+    }
+
+    const backHome = (event) => {
+        navigate(`/`)
     }
 
     useEffect(() => {
@@ -173,6 +177,13 @@ const LeagueComponent = (props) => {
                         </div>
                     ))}
                 </div>}
+
+            <div>
+                <button
+                    name='backToHome'
+                    onClick={event => backHome(event)}
+                >Home</button>
+            </div>
         </div>)
 }
 
