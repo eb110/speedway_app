@@ -92,6 +92,10 @@ const Speedway = () => {
     navigate(`/league/${JSON.stringify({ year: match.year, lige: match.league })}`)
   }
 
+  const backHome = (event) => {
+    navigate(`/`)
+  }
+
   return (
 
     <div>
@@ -146,6 +150,10 @@ const Speedway = () => {
         <button
           onClick={goToTheLeagueComponent}
         >Back</button>
+        <button
+          name='backToHome'
+          onClick={event => backHome(event)}
+        >Home</button>
       </div>
     </div>
 
