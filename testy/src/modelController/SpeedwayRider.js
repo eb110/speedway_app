@@ -114,21 +114,6 @@ export default class SpeedwayRider{
     }
 
     /*
-    It happens the rlach source contains mistakes in riders names
-    this method consist a list of them and send back the proper name
-    */
-    checkSurname(surname){
-        let exc = ['DRAPAŁA']
-        let proper = ['Dropała']
-        let res = surname
-        for(let i = 0; i < exc.length; i++){
-            if(exc[i] === res)
-                return proper[i]
-        }
-        return surname
-    }
-
-    /*
         match - global match with updated parameter values
         all riders already exist in db, same teams
         index - last index of the match.riders list

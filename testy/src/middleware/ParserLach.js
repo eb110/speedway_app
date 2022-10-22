@@ -66,6 +66,16 @@ class ParserLach {
         }
     }
 
+    checkSurnameCorrection(surname){
+        let wrongRlachSurnames = ['DRAPAŁA']
+        let correctSurnames = ['Dropała']
+        for(let i = 0; i < wrongRlachSurnames.length; i++){
+            if(wrongRlachSurnames[i] === surname){
+                return correctSurnames[i]
+            }
+        }
+        return surname;
+    }
 
     teamsNamesParser(){
         let base = this.data.substring(this.data.indexOf('<title>') + 7, this.data.indexOf('</title>'))
@@ -111,6 +121,7 @@ class ParserLach {
             //if rider has had an accident and has been replaced then the 'z' letter
             //is provided
             rider.pointsString = rider.pointsString.replaceAll('/', 'z')
+            rider.surname = this.checkSurnameCorrection(rider.surname)
             arr.push(rider)    
         }
     }
