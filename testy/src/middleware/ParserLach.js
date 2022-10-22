@@ -148,9 +148,10 @@ class ParserLach {
             for(let j = 0; j < points.length; j++){
                 let heatRecord = points[j];
                 let pointTemp = 0.0;
-                if(heatRecord.includes("."))
-                    pointTemp = parseFloat(heatRecord.substring(0, 3));               
-                if('0123456789'.includes(heatRecord[0]))
+                if(heatRecord.includes(".")){
+                    pointTemp = parseFloat(heatRecord.substring(0, 3));
+                }               
+                else if('0123456789'.includes(heatRecord[0]))
                     pointTemp = +("" + heatRecord[0])             
                 if(heatRecord.includes("*"))
                     bonus++;

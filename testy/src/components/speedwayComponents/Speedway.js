@@ -20,11 +20,11 @@ const Speedway = () => {
   useEffect(() => {
 
     calculateResultReliability()
-    calculateAgeLimits()
 
     const updateRiders = async () => {
       await new SpeedwayRider().fetchRidersFromDB(match, match.riders.length - 1)
         .then((res) => setMatch(Object.assign({}, res))).then(() => confirmMatchFunction())
+        .then((res) => calculateAgeLimits())
     }
 
     if (match.fetchRidersFromDB === true) {
@@ -73,16 +73,11 @@ const Speedway = () => {
   }
 
   const calculateAgeLimits = () => {
-    let ageMistake = []
-    for(let i = 0; i < match.riders.length; i++){
-      if(match.riders[i].seasonAge < 16 || match.riders[i].seasonAge > 45)
-        ageMistake.push(match.riders[i])
-    }
+    let ageMistake = match.riders.filter((rider) => rider.seasonAge < 16 || rider.seasonAge > 40)
     if(ageMistake.length > 0){
       let msg = 'Check the age of riders: '
-      for(let i = 0; i < ageMistake.length; i++){
+      for(let i = 0; i < ageMistake.length; i++)
         msg += ageMistake[i].surname + ' '
-      }
       setAgeMessageWarning({state: true, msg: msg})
     }
   }
