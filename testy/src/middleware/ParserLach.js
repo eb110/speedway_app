@@ -67,8 +67,8 @@ class ParserLach {
     }
 
     checkSurnameCorrection(surname){
-        let wrongRlachSurnames = ['DRAPAŁA', 'PAWLICZSK']
-        let correctSurnames = ['Dropała', 'Pawliczek']
+        let wrongRlachSurnames = ['DRAPAŁA', 'PAWLICZSK', 'MIEDZIŃSI']
+        let correctSurnames = ['Dropała', 'Pawliczek', 'Miedziński']
         for(let i = 0; i < wrongRlachSurnames.length; i++){
             if(wrongRlachSurnames[i] === surname){
                 return correctSurnames[i]
