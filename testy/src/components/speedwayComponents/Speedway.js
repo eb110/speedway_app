@@ -14,11 +14,13 @@ const Speedway = () => {
   const [match, setMatch] = useState(JSON.parse(useParams().matchDetails))
   const [message, setMessage] = useState({ state: false, msg: '' })
   const [messageResultCalc, setMessageResultCalc] = useState({ state: false, msg: '' })
+  const [ageMessageWarning, setAgeMessageWarning] = useState({ state: false, msg: '' })
   const [confirmMatch, setConfirmMatch] = useState(false)
 
   useEffect(() => {
 
     calculateResultReliability()
+    calculateAgeLimits()
 
     const updateRiders = async () => {
       await new SpeedwayRider().fetchRidersFromDB(match, match.riders.length - 1)
@@ -70,8 +72,22 @@ const Speedway = () => {
     }
   }
 
-  const confirmButton = async () => {
+  const calculateAgeLimits = () => {
+    let ageMistake = []
+    for(let i = 0; i < match.riders.length; i++){
+      if(match.riders[i].seasonAge < 16 || match.riders[i].seasonAge > 45)
+        ageMistake.push(match.riders[i])
+    }
+    if(ageMistake.length > 0){
+      let msg = 'Check the age of riders: '
+      for(let i = 0; i < ageMistake.length; i++){
+        msg += ageMistake[i].surname + ' '
+      }
+      setAgeMessageWarning({state: true, msg: msg})
+    }
+  }
 
+  const confirmButton = async () => {
     let datka = match.dateOfGame.split('-')
     let datkaWsad = datka[2] + '-' + (datka[1].length === 1 ? '0' + datka[1] : datka[1]) + '-' + (datka[0].length === 1 ? '0' + datka[0] : datka[0]);
     try {
@@ -143,6 +159,11 @@ const Speedway = () => {
         <div>
           {messageResultCalc.state &&
             messageResultCalc.msg
+          }
+        </div>
+        <div>
+          {ageMessageWarning.state &&
+            ageMessageWarning.msg
           }
         </div>
       </div>
