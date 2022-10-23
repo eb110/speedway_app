@@ -86,6 +86,7 @@ const Speedway = () => {
   }
 
   const confirmButton = async () => {
+    setConfirmMatch(false)
     let datka = match.dateOfGame.split('-')
     let datkaWsad = datka[2] + '-' + (datka[1].length === 1 ? '0' + datka[1] : datka[1]) + '-' + (datka[0].length === 1 ? '0' + datka[0] : datka[0]);
     try {

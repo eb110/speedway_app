@@ -77,7 +77,6 @@ const LeagueComponent = (props) => {
         tempTeams.push(addTeam)
         setTeams(tempTeams)
         await new SpeedwayTeam().postNewTeam(addTeam)
-            .then((res) => console.log(addTeam))
     }
 
     const confirmSeason = (event) => {
