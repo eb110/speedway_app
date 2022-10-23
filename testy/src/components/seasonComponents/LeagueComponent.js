@@ -159,7 +159,7 @@ const LeagueComponent = (props) => {
 
             {displaySeason &&
                 <div>
-                    {seasonGames.map((seasonGame) => (
+                    {seasonGames.filter((seasonGame) => !seasonGame.inserted).map((seasonGame) => (           
                         <div
                             key={key++ + 'teamLeagueComponent'}
                         >
@@ -167,15 +167,16 @@ const LeagueComponent = (props) => {
                                 key={key++ + 'seasonGame'}
                             >
                                 {seasonGame.home} - {seasonGame.away}&nbsp;
-                                {!seasonGame.inserted &&
-                                    <button
-                                        name='confirmSeasonGame'
-                                        onClick={event => confirmSeasonGame(event, seasonGame.link, seasonGame.id)}
-                                    >Confirm Season Game</button>}
+
+                                <button
+                                    name='confirmSeasonGame'
+                                    onClick={event => confirmSeasonGame(event, seasonGame.link, seasonGame.id)}
+                                >Confirm Season Game</button>
                             </div>
                         </div>
                     ))}
-                </div>}
+                </div>
+            }
 
             <div>
                 <button
