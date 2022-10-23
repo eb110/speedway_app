@@ -55,6 +55,9 @@ export default class SpeedwayRider{
     }
 
     concatRiderParserWithRiderDB(rider, riderDB, matchDate){
+        let checkDate = +matchDate.substring(matchDate.lastIndexOf('-') + 1)
+        if(rider.surname.toLowerCase() === 'pawlicki' && checkDate < 1995)
+            rider.name = 'Piotr Sr'
         riderDB = riderDB.find((rdr) => rdr.name.substring(0, rider.name.length) === rider.name)
         if(riderDB){
             let numericData = {
