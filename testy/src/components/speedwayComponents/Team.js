@@ -9,8 +9,8 @@ const Team = (props) => {
     const [renderTeamInput, setRenderTeamInput] = useState(false)
     const homeAway = props.homeAway 
     const side = homeAway === "away" ? 'GOŚCIE' : 'GOSPODARZE'
-    const heats = homeAway === "away" ? match.awayHeats : match.homeHeats
-    const result = homeAway === "away" ? match.awayResultPoints : match.homeResultPoints
+    const heats = homeAway === "away" ? props.match.awayHeats : props.match.homeHeats
+    const result = homeAway === "away" ? props.match.awayResultPoints : props.match.homeResultPoints
     const fullNameTag = homeAway === 'away' ? 'fullAwayName' : 'fullHomeName'
   
     useEffect(() => {

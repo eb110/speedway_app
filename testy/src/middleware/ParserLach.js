@@ -173,6 +173,8 @@ class ParserLach {
             riders[i].games = 1
             riders[i].fullPerfects = fullPerfect
             riders[i].paidPerfects = paidPerfect
+            riders[i].currentFullPerfect = fullPerfect
+            riders[i].currentPaidPerfect = paidPerfect
             riders[i].perfect = (fullPerfect > 0 || paidPerfect > 0) ? true : false
         }
         return [result, heats, riders]

@@ -70,15 +70,18 @@ const Speedway = () => {
     if (pts !== 90 || bg !== 60) {
       setMessageResultCalc({ state: true, msg: 'CHECK THE RESULT: Points: ' + pts + ' Heats: ' + bg })
     }
+    else {
+      setMessageResultCalc({ state: false, msg: '' })
+    }
   }
 
   const calculateAgeLimits = () => {
     let ageMistake = match.riders.filter((rider) => rider.seasonAge < 16 || rider.seasonAge > 40)
-    if(ageMistake.length > 0){
+    if (ageMistake.length > 0) {
       let msg = 'Check the age of riders: '
-      for(let i = 0; i < ageMistake.length; i++)
+      for (let i = 0; i < ageMistake.length; i++)
         msg += ageMistake[i].surname + ' '
-      setAgeMessageWarning({state: true, msg: msg})
+      setAgeMessageWarning({ state: true, msg: msg })
     }
   }
 
@@ -125,6 +128,7 @@ const Speedway = () => {
         match={match}
         homeAway='away'
         createNewRider={newRider}
+        updateSpeedwayMatchResult={calculateResultReliability}
       />
       <div>
         <Team
@@ -138,6 +142,7 @@ const Speedway = () => {
         match={match}
         homeAway='home'
         createNewRider={newRider}
+        updateSpeedwayMatchResult={calculateResultReliability}
       />
 
       <div>
