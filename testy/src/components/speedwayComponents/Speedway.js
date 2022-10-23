@@ -33,8 +33,14 @@ const Speedway = () => {
     }
 
     confirmMatchFunction()
+    levelOfGame(match.link[match.link.length - 1])
 
   }, [])
+
+  const levelOfGame = (level) => {
+    if(level === '1')
+      match.league = 'topLeague'
+  }
 
   const newRider = (riderNumber) => {
     for (let i = 0; i < match.riders.length; i++) {
