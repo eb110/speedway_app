@@ -107,8 +107,8 @@ class ParserLach {
         //console.log(base)      
         for(let i = 0; i < base.length; i++){
             let wsad = base[i]
-            let wrongData = ['L MATYSIAK']
-            let correctData = ['L.MATYSIAK']
+            let wrongData = ['L MATYSIAK', 'G.LUBERA']
+            let correctData = ['L.MATYSIAK', 'R.LUBERA']
             for(let j = 0; j < wrongData.length; j++){
                 if(wsad.includes(wrongData[j])){
                     wsad = wsad.replace(wrongData[j], correctData[j])
