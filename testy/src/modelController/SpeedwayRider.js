@@ -82,6 +82,14 @@ export default class SpeedwayRider {
                 }
             }
         }
+        else if(rider.surname.toLowerCase() === 'wiśniewski'){
+            if(checkDate === 1985){
+                if(rider.name === 'J'){
+                    rider.name = 'Tadeusz'
+                    riderDB = riderDB.filter((rdr) => rdr.id === 326)
+                }
+            }
+        }
         riderDB = riderDB.find((rdr) => rdr.name.substring(0, rider.name.length) === rider.name)
         if (riderDB) {
             let numericData = {
