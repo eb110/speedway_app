@@ -75,6 +75,13 @@ export default class SpeedwayRider {
                 rider.name = 'Przemysław'
             }
         }
+        else if(rider.surname.toLowerCase() === 'kowalski'){
+            if(rider.name === 'S'){
+                if(checkDate === 1985){
+                    riderDB = riderDB.filter((rdr) => rdr.id === 487)
+                }
+            }
+        }
         riderDB = riderDB.find((rdr) => rdr.name.substring(0, rider.name.length) === rider.name)
         if (riderDB) {
             let numericData = {
