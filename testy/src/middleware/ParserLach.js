@@ -88,9 +88,8 @@ class ParserLach {
     dateOfGameParser(){
         let base = this.data.substring(0, this.data.indexOf('<'))
         this.data = this.data.substring(this.data.indexOf('1 '))
-        //base = base.split('-').map(x => parseInt(x))
-        //this.dateOfGame = new Date(base[2], base[1], base[0])
-        this.dateOfGame = base.replaceAll(' ', '')  
+        this.dateOfGame = base.replaceAll(' ', '')
+        this.dateOfGame = this.dateOfGame.substring(0, this.dateOfGame.indexOf('('))
     }
 
     teamParser(flag, arr){
