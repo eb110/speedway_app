@@ -149,6 +149,7 @@ class ParserLach {
         let result = 0.0
         let heats = 0
         for(let i = 0; i < riders.length; i++){
+            riders[i].pointsString = riders[i].pointsString.replaceAll(' ', '')
             let points = riders[i].pointsString.split(',').filter((x) => x !== '-')
             let bonus = 0;
             let point = 0.0
