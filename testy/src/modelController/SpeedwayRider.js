@@ -103,15 +103,11 @@ export default class SpeedwayRider {
             for (const key in riderDB) {
                 rider[key] = riderDB[key]
             }
-            rider.points += numericData.points
             rider.pointsCurrent = numericData.points
-            rider.bonuses += numericData.bonuses
             rider.bonusesCurrent = numericData.bonuses
-            rider.heats += numericData.heats
             rider.heatsCurrent = numericData.heats
-            rider.games += numericData.games
-            rider.fullPerfects += numericData.fullPerfects
-            rider.paidPerfects += numericData.paidPerfects
+            rider.fullPerfectsCurrent = numericData.fullPerfects
+            rider.paidPerfectsCurrent = numericData.paidPerfects
             rider = this.updateRiderBirthAttribs(rider, matchDate)
             rider.edit = false
         }

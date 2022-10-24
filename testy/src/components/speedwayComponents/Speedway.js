@@ -91,7 +91,19 @@ const Speedway = () => {
     }
   }
 
+  const updateRidersScoring = () => {
+    for(let i = 0; i < match.riders.length; i++){
+      match.riders[i].bonuses += match.riders[i].bonusesCurrent
+      match.riders[i].points += match.riders[i].pointsCurrent
+      match.riders[i].heats += match.riders[i].heatsCurrent
+      match.riders[i].paidPerfects += match.riders[i].paidPerfectsCurrent
+      match.riders[i].fullPerfects += match.riders[i].fullPerfectsCurrent
+      match.riders[i].games++
+    }
+  }
+
   const confirmButton = async () => {
+    updateRidersScoring()
     setConfirmMatch(false)
     let datka = match.dateOfGame.split('-')
     let datkaWsad = datka[2] + '-' + (datka[1].length === 1 ? '0' + datka[1] : datka[1]) + '-' + (datka[0].length === 1 ? '0' + datka[0] : datka[0]);

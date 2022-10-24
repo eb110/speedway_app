@@ -52,26 +52,11 @@ const Points = (props) => {
         updateRiderPoints(riderPoints)
     }
     const updateRiderPoints = (recalculatedPoints) => {
-        rider.bonuses -= rider.bonusesCurrent
         rider.bonusesCurrent = recalculatedPoints.bonus
-        rider.bonuses += recalculatedPoints.bonus
-
-        rider.fullPerfects -= rider.currentFullPerfect
-        rider.currentFullPerfect = recalculatedPoints.fullPerfect
-        rider.fullPerfects += recalculatedPoints.fullPerfect
-
-        rider.paidPerfects -= rider.currentPaidPerfect
-        rider.currentPaidPerfect = recalculatedPoints.paidPerfect
-        rider.paidPerfects += recalculatedPoints.paidPerfect
-
-        rider.heats -= rider.heatsCurrent
+        rider.fullPerfectsCurrent = recalculatedPoints.fullPerfect
+        rider.paidPerfectsCurrent = recalculatedPoints.paidPerfect
         rider.heatsCurrent = recalculatedPoints.heat
-        rider.heats += recalculatedPoints.heat
-
-        rider.points -= rider.pointsCurrent
         rider.pointsCurrent = recalculatedPoints.point
-        rider.points += recalculatedPoints.point
-
         rider.pointsString = recalculatedPoints.pointsString
 
         updateResult(rider)

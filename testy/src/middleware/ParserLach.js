@@ -5,8 +5,8 @@
 //the result from encoder should to be provided to the parser (endoded.str)
 
 class ParserLach {
-    constructor(data){
-       // console.log(data)
+    constructor(data) {
+        // console.log(data)
         this.data = data;
         this.home = ''
         this.fullHomeName = undefined
@@ -33,7 +33,7 @@ class ParserLach {
         this.teamParser(2, this.homeRiders)
         this.parseOfficial()
         this.consolidateRiders();
-        
+
         let res = this.countResult(this.awayRiders)
         this.awayResultPoints = res[0]
         this.awayHeats = res[1]
@@ -42,42 +42,42 @@ class ParserLach {
         this.homeResultPoints = res[0]
         this.homeHeats = res[1]
         this.homeRiders = res[2]
-        
+
     }
 
-    roundAndLeagueParser(){
+    roundAndLeagueParser() {
         let check = this.data.substring(0, this.data.indexOf(':'))
         this.league = check.substring(check.lastIndexOf('\n') + 5)
-        this.round = this.data.substring(this.data.indexOf('RUNDA') -4, this.data.indexOf('RUNDA') - 1).replaceAll(' ', '')
-        if(this.round.length === 0)
+        this.round = this.data.substring(this.data.indexOf('RUNDA') - 4, this.data.indexOf('RUNDA') - 1).replaceAll(' ', '')
+        if (this.round.length === 0)
             this.round = 'PO'
     }
 
-    consolidateRiders(){
-        for(let i = 0; i < this.awayRiders.length; i++){
+    consolidateRiders() {
+        for (let i = 0; i < this.awayRiders.length; i++) {
             let wsad = this.awayRiders[i]
             wsad.homeAway = 'away'
             this.riders.push(wsad)
         }
-        for(let i = 0; i < this.homeRiders.length; i++){
+        for (let i = 0; i < this.homeRiders.length; i++) {
             let wsad = this.homeRiders[i]
             wsad.homeAway = 'home'
             this.riders.push(wsad)
         }
     }
 
-    checkSurnameCorrection(surname){
+    checkSurnameCorrection(surname) {
         let wrongRlachSurnames = ['DRAPAŁA', 'PAWLICZSK', 'MIEDZIŃSI', 'KWIDZYŃSKI']
         let correctSurnames = ['Dropała', 'Pawliczek', 'Miedziński', 'Kwidziński']
-        for(let i = 0; i < wrongRlachSurnames.length; i++){
-            if(wrongRlachSurnames[i] === surname){
+        for (let i = 0; i < wrongRlachSurnames.length; i++) {
+            if (wrongRlachSurnames[i] === surname) {
                 return correctSurnames[i]
             }
         }
         return surname;
     }
 
-    teamsNamesParser(){
+    teamsNamesParser() {
         let base = this.data.substring(this.data.indexOf('<title>') + 7, this.data.indexOf('</title>'))
         this.data = this.data.substring(this.data.indexOf(':') + 1)
         this.home = base.split(' - ')
@@ -85,31 +85,32 @@ class ParserLach {
         this.home = this.home[0].split(' ')[0]
     }
 
-    dateOfGameParser(){
+    dateOfGameParser() {
         let base = this.data.substring(0, this.data.indexOf('<'))
         this.data = this.data.substring(this.data.indexOf('1 '))
         this.dateOfGame = base.replaceAll(' ', '')
-        this.dateOfGame = this.dateOfGame.substring(0, this.dateOfGame.indexOf('('))
+        if (this.dateOfGame.includes('('))
+            this.dateOfGame = this.dateOfGame.substring(0, this.dateOfGame.indexOf('('))
     }
 
-    teamParser(flag, arr){
+    teamParser(flag, arr) {
         let base = ""
-        if(flag === 1){
+        if (flag === 1) {
             base = this.data.substring(0, this.data.indexOf('\n     '))
             this.data = this.data.substring(this.data.indexOf('\n     '))
         }
-        else{
+        else {
             base = this.data.substring(this.data.indexOf('<br>\n    ') + 9, this.data.indexOf('<br><br>'))
         }
         base = base.replaceAll('(G)', '')
         base = base.split('<br>\r\n    ').filter(x => x.includes('('))
-        //console.log(base)      
-        for(let i = 0; i < base.length; i++){
+        base = base.filter((riderData) => !riderData.includes('brak zawodnika'))
+        for (let i = 0; i < base.length; i++) {
             let wsad = base[i]
             let wrongData = ['L MATYSIAK', 'G.LUBERA', 'W, ZAŁUSKI']
             let correctData = ['L.MATYSIAK', 'R.LUBERA', 'W.ZAŁUSKI']
-            for(let j = 0; j < wrongData.length; j++){
-                if(wsad.includes(wrongData[j])){
+            for (let j = 0; j < wrongData.length; j++) {
+                if (wsad.includes(wrongData[j])) {
                     wsad = wsad.replace(wrongData[j], correctData[j])
                     break
                 }
@@ -119,11 +120,11 @@ class ParserLach {
             wsad = wsad.substring(wsad.indexOf(' ') + 1)
             rider.name = wsad.substring(0, wsad.indexOf('.'))
             rider.surname = wsad.substring(wsad.indexOf('.') + 1)
-            if(wsad.indexOf('jr') !== -1)
+            if (wsad.indexOf('jr') !== -1)
                 rider.surname = rider.surname.substring(0, rider.surname.indexOf('jr.') + 3)
-            else{
+            else {
                 rider.surname = rider.surname.substring(0, rider.surname.indexOf(' '))
-            }         
+            }
             rider.pointsString = wsad.substring(wsad.indexOf('(') + 1, wsad.indexOf(')'))
             //as there is an issue with '/-' during the render
             //if rider has had an accident and has been replaced then the 'z' letter
@@ -131,11 +132,11 @@ class ParserLach {
             rider.pointsString = rider.pointsString.replaceAll('/', 'z')
             rider.pointsString = rider.pointsString.replaceAll('?', 'X')
             rider.surname = this.checkSurnameCorrection(rider.surname)
-            arr.push(rider)    
+            arr.push(rider)
         }
     }
 
-    parseOfficial(){
+    parseOfficial() {
         this.data = this.data.substring(this.data.indexOf("Sędzia: ") + 8)
         this.official = this.data.substring(0, this.data.indexOf(' ') + 1)
         this.data = this.data.substring(this.data.indexOf(' ') + 1)
@@ -144,10 +145,10 @@ class ParserLach {
         this.data = ''
     }
 
-    countResult(riders){
+    countResult(riders) {
         let result = 0.0
         let heats = 0
-        for(let i = 0; i < riders.length; i++){
+        for (let i = 0; i < riders.length; i++) {
             riders[i].pointsString = riders[i].pointsString.replaceAll(' ', '')
             let points = riders[i].pointsString.split(',').filter((x) => x !== '-')
             let bonus = 0;
@@ -155,26 +156,26 @@ class ParserLach {
             let heat = 0
             let fullPerfect = 0
             let paidPerfect = 0
-            for(let j = 0; j < points.length; j++){
+            for (let j = 0; j < points.length; j++) {
                 let heatRecord = points[j];
                 let pointTemp = 0.0;
-                if(heatRecord.includes(".")){
+                if (heatRecord.includes(".")) {
                     pointTemp = parseFloat(heatRecord.substring(0, 3));
-                }               
-                else if('0123456789'.includes(heatRecord[0]))
-                    pointTemp = +("" + heatRecord[0])             
-                if(heatRecord.includes("*"))
+                }
+                else if ('0123456789'.includes(heatRecord[0]))
+                    pointTemp = +("" + heatRecord[0])
+                if (heatRecord.includes("*"))
                     bonus++;
                 point += pointTemp;
                 result += pointTemp;
                 heats++;
                 heat++;
             }
-  
-            if(heat >= 5 && point / heat === 3){
+
+            if (heat >= 5 && point / heat === 3) {
                 fullPerfect++;
             }
-            else if(heat >= 5 && (point + bonus) / heat === 3) {
+            else if (heat >= 5 && (point + bonus) / heat === 3) {
                 paidPerfect++;
             }
             riders[i].heats = heat
