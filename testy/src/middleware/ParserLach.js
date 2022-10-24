@@ -103,9 +103,18 @@ class ParserLach {
             base = this.data.substring(this.data.indexOf('<br>\n    ') + 9, this.data.indexOf('<br><br>'))
         }
         base = base.replaceAll('(G)', '')
-        base = base.split('<br>\r\n    ').filter(x => x.includes('('))      
+        base = base.split('<br>\r\n    ').filter(x => x.includes('('))
+        console.log(base)      
         for(let i = 0; i < base.length; i++){
             let wsad = base[i]
+            let wrongData = ['L MATYSIAK']
+            let correctData = ['L.MATYSIAK']
+            for(let j = 0; j < wrongData.length; j++){
+                if(wsad.includes(wrongData[j])){
+                    wsad = wsad.replace(wrongData[j], correctData[j])
+                    break
+                }
+            }
             let rider = {}
             rider.nr = wsad.substring(0, wsad.indexOf(' '))
             wsad = wsad.substring(wsad.indexOf(' ') + 1)
