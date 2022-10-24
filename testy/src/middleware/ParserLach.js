@@ -104,7 +104,7 @@ class ParserLach {
         }
         base = base.replaceAll('(G)', '')
         base = base.split('<br>\r\n    ').filter(x => x.includes('('))
-        console.log(base)      
+        //console.log(base)      
         for(let i = 0; i < base.length; i++){
             let wsad = base[i]
             let wrongData = ['L MATYSIAK']
