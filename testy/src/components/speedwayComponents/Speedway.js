@@ -107,6 +107,7 @@ const Speedway = () => {
   const calculateAgeLimits = () => {
     let ageMistake = match.riders.filter((rider) => rider.seasonAge < 16 || rider.seasonAge > 40)
     if (ageMistake.length > 0) {
+      setConfirmMatch(false)
       let msg = 'Check the age of riders: '
       for (let i = 0; i < ageMistake.length; i++)
         msg += ageMistake[i].surname + ' '
