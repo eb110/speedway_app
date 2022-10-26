@@ -16,6 +16,8 @@ const Speedway = () => {
   const [messageResultCalc, setMessageResultCalc] = useState({ state: false, msg: '' })
   const [ageMessageWarning, setAgeMessageWarning] = useState({ state: false, msg: '' })
   const [confirmMatch, setConfirmMatch] = useState(false)
+  const [confirmStartingNumbers, setConfirmStartingNumbers] = useState({ state: false, msg: '' })
+  const [confirmDateOfGame, setConfirmDateOfGame] = useState({ state: false, msg: '' })
 
   useEffect(() => {
 
@@ -24,7 +26,11 @@ const Speedway = () => {
     const updateRiders = async () => {
       await new SpeedwayRider().fetchRidersFromDB(match, match.riders.length - 1)
         .then((res) => setMatch(Object.assign({}, res))).then(() => confirmMatchFunction())
-        .then((res) => calculateAgeLimits())
+        .then((res) => {
+          calculateAgeLimits()
+          confirmGameDate()
+          confirmRidersStartingNumbers()
+        })
     }
 
     if (match.fetchRidersFromDB === true) {
@@ -42,6 +48,14 @@ const Speedway = () => {
       match.league = 'topLeague'
   }
 
+  const confirmGameDate = () => {
+    let tempYear = match.dateOfGame.substring(match.dateOfGame.lastIndexOf('-') + 1)
+    if(tempYear !== match.year){
+      setConfirmDateOfGame({state: true, msg: 'Check the date of game'})
+      setConfirmMatch(false)
+    }
+  }
+
   const newRider = (riderNumber) => {
     for (let i = 0; i < match.riders.length; i++) {
       if (match.riders[i].nr === riderNumber) {
@@ -55,6 +69,15 @@ const Speedway = () => {
   const updateTheMatchFromTeamComponent = (homeAway, team) => {
     match[homeAway + "Team"] = team
     setMatch(Object.assign({}, match))
+    setConfirmMatch(false)
+  }
+
+  const confirmRidersStartingNumbers = () => {
+    let numb = ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16']
+    if(match.riders.some((rider) => !numb.includes(rider.nr))){
+      setConfirmStartingNumbers({state: true, msg: 'Check starting numbers'})
+      setConfirmMatch(false)
+    }
   }
 
   const confirmMatchFunction = () => {
@@ -183,6 +206,16 @@ const Speedway = () => {
         <div>
           {ageMessageWarning.state &&
             ageMessageWarning.msg
+          }
+        </div>
+        <div>
+          {confirmStartingNumbers.state &&
+            confirmStartingNumbers.msg
+          }
+        </div>
+        <div>
+          {confirmDateOfGame.state &&
+            confirmDateOfGame.msg
           }
         </div>
       </div>

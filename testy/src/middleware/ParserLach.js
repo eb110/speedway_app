@@ -107,14 +107,14 @@ class ParserLach {
         base = base.filter((riderData) => !riderData.includes('brak zawodnika'))
         for (let i = 0; i < base.length; i++) {
             let wsad = base[i]
-            let wrongData = ['L MATYSIAK', 'G.LUBERA', 'W, ZAŁUSKI']
-            let correctData = ['L.MATYSIAK', 'R.LUBERA', 'W.ZAŁUSKI']
-            for (let j = 0; j < wrongData.length; j++) {
-                if (wsad.includes(wrongData[j])) {
-                    wsad = wsad.replace(wrongData[j], correctData[j])
-                    break
-                }
-            }
+            // let wrongData = ['L MATYSIAK', 'G.LUBERA', 'W, ZAŁUSKI']
+            // let correctData = ['L.MATYSIAK', 'R.LUBERA', 'W.ZAŁUSKI']
+            // for (let j = 0; j < wrongData.length; j++) {
+            //     if (wsad.includes(wrongData[j])) {
+            //         wsad = wsad.replace(wrongData[j], correctData[j])
+            //         break
+            //     }
+            // }
             let rider = {}
             rider.nr = wsad.substring(0, wsad.indexOf(' '))
             wsad = wsad.substring(wsad.indexOf(' ') + 1)
@@ -131,7 +131,7 @@ class ParserLach {
             //is provided
             rider.pointsString = rider.pointsString.replaceAll('/', 'z')
             rider.pointsString = rider.pointsString.replaceAll('?', 'X')
-            rider.surname = this.checkSurnameCorrection(rider.surname)
+          //  rider.surname = this.checkSurnameCorrection(rider.surname)
             arr.push(rider)
         }
     }

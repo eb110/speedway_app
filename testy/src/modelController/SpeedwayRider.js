@@ -64,32 +64,32 @@ export default class SpeedwayRider {
                 rider.name = 'Piotr Jr'
             }
         }
-        else if (rider.surname.toLowerCase() === 'baliński' && rider.name === 'D') {
-            rider.name = 'Dariusz'
-        }
-        else if (rider.surname.toLowerCase() === 'liszka') {
-            if (checkDate < 1986) {
-                rider.name = 'Piotr'
-            }
-            else {
-                rider.name = 'Przemysław'
-            }
-        }
-        else if(rider.surname.toLowerCase() === 'kowalski'){
-            if(rider.name === 'S'){
-                if(checkDate === 1985){
-                    riderDB = riderDB.filter((rdr) => rdr.id === 487)
-                }
-            }
-        }
-        else if(rider.surname.toLowerCase() === 'wiśniewski'){
-            if(checkDate === 1985){
-                if(rider.name === 'J'){
-                    rider.name = 'Tadeusz'
-                    riderDB = riderDB.filter((rdr) => rdr.id === 326)
-                }
-            }
-        }
+        // else if (rider.surname.toLowerCase() === 'baliński' && rider.name === 'D') {
+        //     rider.name = 'Dariusz'
+        // }
+        // else if (rider.surname.toLowerCase() === 'liszka') {
+        //     if (checkDate < 1986) {
+        //         rider.name = 'Piotr'
+        //     }
+        //     else {
+        //         rider.name = 'Przemysław'
+        //     }
+        // }
+        // else if(rider.surname.toLowerCase() === 'kowalski'){
+        //     if(rider.name === 'S'){
+        //         if(checkDate === 1985){
+        //             riderDB = riderDB.filter((rdr) => rdr.id === 487)
+        //         }
+        //     }
+        // }
+        // else if(rider.surname.toLowerCase() === 'wiśniewski'){
+        //     if(checkDate === 1985){
+        //         if(rider.name === 'J'){
+        //             rider.name = 'Tadeusz'
+        //             riderDB = riderDB.filter((rdr) => rdr.id === 326)
+        //         }
+        //     }
+        // }
         riderDB = riderDB.find((rdr) => rdr.name.substring(0, rider.name.length) === rider.name)
         if (riderDB) {
             let numericData = {
