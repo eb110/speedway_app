@@ -118,7 +118,7 @@ const LeagueComponent = (props) => {
     }
 
     useEffect(() => {
-        console.log('league component db read')
+        //console.log('league component db read')
         fetchSeason(rok)
     }, [confirm])
 

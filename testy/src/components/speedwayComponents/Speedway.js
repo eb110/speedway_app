@@ -50,7 +50,7 @@ const Speedway = () => {
 
   const confirmGameDate = () => {
     let tempYear = match.dateOfGame.substring(match.dateOfGame.lastIndexOf('-') + 1)
-    if(tempYear !== match.year){
+    if(tempYear !== match.year || match.dateOfGame.length > 10){
       setConfirmDateOfGame({state: true, msg: 'Check the date of game'})
       setConfirmMatch(false)
     }
@@ -107,7 +107,6 @@ const Speedway = () => {
   const calculateAgeLimits = () => {
     let ageMistake = match.riders.filter((rider) => rider.seasonAge < 16 || rider.seasonAge > 40)
     if (ageMistake.length > 0) {
-      setConfirmMatch(false)
       let msg = 'Check the age of riders: '
       for (let i = 0; i < ageMistake.length; i++)
         msg += ageMistake[i].surname + ' '

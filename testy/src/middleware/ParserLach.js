@@ -6,7 +6,6 @@
 
 class ParserLach {
     constructor(data) {
-        // console.log(data)
         this.data = data;
         this.home = ''
         this.fullHomeName = undefined
@@ -103,7 +102,8 @@ class ParserLach {
             base = this.data.substring(this.data.indexOf('<br>\n    ') + 9, this.data.indexOf('<br><br>'))
         }
         base = base.replaceAll('(G)', '')
-        base = base.split('<br>\r\n    ').filter(x => x.includes('('))
+        base = base.replaceAll('\r', '')
+        base = base.split('<br>\n    ').filter(x => x.includes('('))
         base = base.filter((riderData) => !riderData.includes('brak zawodnika'))
         for (let i = 0; i < base.length; i++) {
             let wsad = base[i]

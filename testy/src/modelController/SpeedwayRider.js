@@ -168,7 +168,7 @@ export default class SpeedwayRider {
                 },
                 body: JSON.stringify(rdr)
             });
-            console.log('speedway rider update')
+           // console.log('speedway rider update')
         } catch (error) {
             console.log('update rider failed')
         }
