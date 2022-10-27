@@ -90,6 +90,7 @@ class ParserLach {
         this.dateOfGame = base.replaceAll(' ', '')
         if (this.dateOfGame.includes('('))
             this.dateOfGame = this.dateOfGame.substring(0, this.dateOfGame.indexOf('('))
+        this.dateOfGame = this.dateOfGame.replace(/[^0-9-]/gi, '')
     }
 
     teamParser(flag, arr) {
