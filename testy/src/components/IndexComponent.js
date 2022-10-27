@@ -16,7 +16,7 @@ function IndexComponent(){
             <Routes>
                 <Route exact path="/" element={<SharedLayout />} >
                     <Route index element={<Home />} />
-                    <Route exact path="/fetch/:rlachLink" element={<FetchRlach />} />
+                    <Route exact path="/fetch/:seasonGame" element={<FetchRlach />} />
                     <Route exact path="/*" element={<Error />} />
                     <Route exact path="/newRider/:matchDetails" element={<NewRider />} />
                     <Route exact path="/speedwayMatch/:matchDetails" element={<SpeedwayMatchPage />} />

@@ -25,10 +25,7 @@ export default class SeasonGames {
         }
     }
 
-    async updateInsertedStateToTrue(seasonGameId) {
-        let sg = {
-            id: seasonGameId
-        }
+    async updateSeasonGame(seasonGame) {
         try {
             await fetch(`http://localhost:8080/seasonGames/updateSeasonGames`, {
                 method: 'PUT',
@@ -36,7 +33,7 @@ export default class SeasonGames {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(sg)
+                body: JSON.stringify(seasonGame)
             });
         } catch (error) {
             console.log('update of the season game has failed')
@@ -44,14 +41,14 @@ export default class SeasonGames {
 
         prepareRlachLinkElements(seasonGames, year){
             for (let i = 0; i < seasonGames.length; i++) {
-                seasonGames[i].rlachHome = seasonGames[i].home.substring(0, 2).toLowerCase()
-                seasonGames[i].rlachAway = seasonGames[i].away.substring(0, 2).toLowerCase()
+                let rlachHome = seasonGames[i].home.substring(0, 2).toLowerCase()
+                let rlachAway = seasonGames[i].away.substring(0, 2).toLowerCase()
                 //zielona góra case
-                seasonGames[i].rlachAway = seasonGames[i].rlachAway === 'zi' ? 'zg' : seasonGames[i].rlachAway === 'św' ? 'sw' : seasonGames[i].rlachAway
-                seasonGames[i].rlachHome = seasonGames[i].rlachHome === 'zi' ? 'zg' : seasonGames[i].rlachHome === 'św' ? 'sw' : seasonGames[i].rlachHome
-                seasonGames[i].rlachLeague = seasonGames[i].level === 'topLeague' ? '_1.htm' : 'next choice'
-                seasonGames[i].rlachDomain = seasonGames[i].level === 'topLeague' ? 'http://www.speedwayw.pl/dmp/' : 'next choice'
-                seasonGames[i].link = seasonGames[i].rlachDomain + year + '/' + seasonGames[i].rlachHome + seasonGames[i].rlachAway + seasonGames[i].rlachLeague
+                rlachAway = rlachAway === 'zi' ? 'zg' : rlachAway === 'św' ? 'sw' : rlachAway
+                rlachHome = rlachHome === 'zi' ? 'zg' : rlachHome === 'św' ? 'sw' : rlachHome
+                let rlachLeague = seasonGames[i].level === 'topLeague' ? '_1.htm' : 'next choice'
+                let rlachDomain = seasonGames[i].level === 'topLeague' ? 'http:**www.speedwayw.pl*dmp*' : 'next choice'
+                seasonGames[i].link = rlachDomain + year + '*' + rlachHome + rlachAway + rlachLeague
             }
             return seasonGames
         }

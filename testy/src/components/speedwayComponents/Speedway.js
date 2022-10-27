@@ -19,6 +19,9 @@ const Speedway = () => {
   const [confirmStartingNumbers, setConfirmStartingNumbers] = useState({ state: false, msg: '' })
   const [confirmDateOfGame, setConfirmDateOfGame] = useState({ state: false, msg: '' })
 
+  match.year = match.seasonGame.season.year
+  match.seasonGame.link = match.seasonGame.link.replaceAll('*', '/')
+
   useEffect(() => {
 
     calculateResultReliability()
@@ -39,17 +42,16 @@ const Speedway = () => {
     }
 
     confirmMatchFunction()
-    levelOfGame(match.link[match.link.length - 1])
+    levelOfGame()
 
   }, [])
 
-  const levelOfGame = (level) => {
-    if(level === '1')
-      match.league = 'topLeague'
+  const levelOfGame = () => {
+      match.league = match.seasonGame.level
   }
 
   const confirmGameDate = () => {
-    let tempYear = match.dateOfGame.substring(match.dateOfGame.lastIndexOf('-') + 1)
+    let tempYear = +match.dateOfGame.substring(match.dateOfGame.lastIndexOf('-') + 1)
     if(tempYear !== match.year || match.dateOfGame.length > 10){
       setConfirmDateOfGame({state: true, msg: 'Check the date of game'})
       setConfirmMatch(false)
@@ -131,21 +133,21 @@ const Speedway = () => {
     let datka = match.dateOfGame.split('-')
     let datkaWsad = datka[2] + '-' + (datka[1].length === 1 ? '0' + datka[1] : datka[1]) + '-' + (datka[0].length === 1 ? '0' + datka[0] : datka[0]);
     try {
-      await new SpeedwayMatch().insertMatch(datkaWsad, match.round, match.league)
+      await new SpeedwayMatch().insertMatch(datkaWsad, match.round, match.seasonGame.level)
         .then(() => new SpeedwayMatch().getLastMatch())
         .then((res) => { match.match = res; return })
         .then(() => new SpeedwayMatchRider().postMatchRiders(match, match.riders.length - 1))
         .then(() => new SpeedwayRider().updateRiders(match, match.riders.length - 1))
-        .then(() => { new InsertedMatch().insertMatch(match.link); setMessage({ state: true, msg: 'The match has been uploaded' }) })
-        .then(() => new SeasonGames().updateInsertedStateToTrue(match.seasonGameId))
-      //to do -> update riders
+        .then(() => { new InsertedMatch().insertMatch(match.seasonGame.link); setMessage({ state: true, msg: 'The match has been uploaded' }) })
+        .then(() => {match.seasonGame.inserted = true; new SeasonGames().updateSeasonGame(match.seasonGame)})
     } catch (error) {
+      match.seasonGame.inserted = false
       console.log('confirm of the match results failed')
     }
   }
 
   const goToTheLeagueComponent = () => {
-    navigate(`/league/${JSON.stringify({ year: match.year, lige: match.league })}`)
+    navigate(`/league/${JSON.stringify({ year: match.seasonGame.season.year, lige: match.seasonGame.level })}`)
   }
 
   const backHome = (event) => {
@@ -156,7 +158,7 @@ const Speedway = () => {
 
     <div>
       <div>
-        Data: {match.dateOfGame} - {match.league}
+        Data: {match.dateOfGame} - {match.seasonGame.level}
       </div>
       <div>
         <Team

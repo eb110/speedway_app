@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import SeasonGames from '../../modelController/SeasonGames';
 import SeasonModel from '../../modelController/SeasonModel';
 import SpeedwayTeam from "../../modelController/SpeedwayTeam"
+import SeasonGame from './SeasonGame';
 
 const LeagueComponent = (props) => {
     const rok = props.leagueDetails.year
@@ -103,16 +104,6 @@ const LeagueComponent = (props) => {
             .then((res) => setConfirm(true))
     }
 
-    const confirmSeasonGame = (event, link, gameId) => {
-        const data = {
-            seasonGameId: gameId,
-            year: rok,
-            league: liga,
-            link: link.replaceAll('/', '*')
-        }
-        navigate(`/fetch/${JSON.stringify(data)}`)
-    }
-
     const backHome = (event) => {
         navigate(`/`)
     }
@@ -159,21 +150,13 @@ const LeagueComponent = (props) => {
 
             {displaySeason &&
                 <div>
-                    {seasonGames.filter((seasonGame) => !seasonGame.inserted).map((seasonGame) => (           
-                        <div
-                            key={key++ + 'teamLeagueComponent'}
-                        >
-                            <div
-                                key={key++ + 'seasonGame'}
-                            >
-                                {seasonGame.home} - {seasonGame.away}&nbsp;
-
-                                <button
-                                    name='confirmSeasonGame'
-                                    onClick={event => confirmSeasonGame(event, seasonGame.link, seasonGame.id)}
-                                >Confirm Season Game</button>
-                            </div>
-                        </div>
+                    {seasonGames.filter((seasonGame) => !seasonGame.inserted).map((seasonGame) => (
+                        <SeasonGame
+                            key={key++ + ' seasonGame'}
+                            seasonGame={seasonGame}
+                            rok={rok}
+                            liga={liga}
+                        ></SeasonGame>
                     ))}
                 </div>
             }

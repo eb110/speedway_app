@@ -10,10 +10,10 @@ const FetchComponent = (props) => {
     const [axiosUrl, setAxiosUrl] = useState('')
     const [message, setMessage] = useState({ state: false, msg: '' })
 
-    let leagueData = props.rlachLink
-    leagueData.link = leagueData.link.replaceAll('*', '/')
+    let seasonGame = props.seasonGame;
+    seasonGame.link = seasonGame.link.replaceAll('*', '/')
 
-    const [inputValue, setInputValue] = useState(leagueData.link)
+    const [inputValue, setInputValue] = useState(seasonGame.link)
 
     const navigate = useNavigate()
 
@@ -35,9 +35,8 @@ const FetchComponent = (props) => {
                         .then((res) => new InsertedMatch().addLinkToMatchJson(axiosUrl, res))
                         .then((parameter) => {
                             let tempParameter = JSON.parse(parameter)
-                            tempParameter.year = leagueData.year;
-                            tempParameter.league = leagueData.league;
-                            tempParameter.seasonGameId = leagueData.seasonGameId;
+                            tempParameter.seasonGame = seasonGame
+                            tempParameter.seasonGame.link = tempParameter.seasonGame.link.replaceAll('/', '*')
                             navigate(`/speedwayMatch/${JSON.stringify(tempParameter)}`)
                         })
 

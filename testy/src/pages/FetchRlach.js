@@ -2,7 +2,7 @@ import {useParams} from 'react-router-dom'
 import FetchComponent from "../components/FetchComponent";
 
 const FetchRlach = () => {
-    const {rlachLink} = useParams();
+    const {seasonGame} = useParams();
     return (
 
       <div
@@ -12,7 +12,7 @@ const FetchRlach = () => {
           border: '1px solid red'}}
       >
         <FetchComponent 
-          rlachLink={JSON.parse(rlachLink)}
+          seasonGame={JSON.parse(seasonGame)}
         />
       </div>
      
