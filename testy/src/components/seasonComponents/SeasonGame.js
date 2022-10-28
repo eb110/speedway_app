@@ -1,12 +1,10 @@
 import { useNavigate } from 'react-router-dom'
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import SeasonGames from '../../modelController/SeasonGames';
 
 const SeasonGame = (props) => {
 
     let seasonGame = props.seasonGame;
-    let rok = props.rok;
-    let liga = props.liga;
 
     const [walkoverButtonsConfirmation, setWalkoverButtonsConfirmation] = useState(false)
     const [displayComponent, setDisplayComponent] = useState(true)

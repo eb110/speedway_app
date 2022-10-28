@@ -7,6 +7,7 @@ import Team from './Team';
 import SpeedwayMatchRider from '../../modelController/SpeedwayMatchRider';
 import SpeedwayMatch from '../../modelController/SpeedwayMatch';
 import SeasonGames from '../../modelController/SeasonGames';
+import Validator from '../validators/Validator';
 
 const Speedway = () => {
 
@@ -16,8 +17,8 @@ const Speedway = () => {
   const [messageResultCalc, setMessageResultCalc] = useState({ state: false, msg: '' })
   const [ageMessageWarning, setAgeMessageWarning] = useState({ state: false, msg: '' })
   const [confirmMatch, setConfirmMatch] = useState(false)
-  const [confirmStartingNumbers, setConfirmStartingNumbers] = useState({ state: false, msg: '' })
-  const [confirmDateOfGame, setConfirmDateOfGame] = useState({ state: false, msg: '' })
+ 
+
 
   match.year = match.seasonGame.season.year
   match.seasonGame.link = match.seasonGame.link.replaceAll('*', '/')
@@ -31,8 +32,6 @@ const Speedway = () => {
         .then((res) => setMatch(Object.assign({}, res))).then(() => confirmMatchFunction())
         .then((res) => {
           calculateAgeLimits()
-          confirmGameDate()
-          confirmRidersStartingNumbers()
         })
     }
 
@@ -50,13 +49,7 @@ const Speedway = () => {
       match.league = match.seasonGame.level
   }
 
-  const confirmGameDate = () => {
-    let tempYear = +match.dateOfGame.substring(match.dateOfGame.lastIndexOf('-') + 1)
-    if(tempYear !== match.year || match.dateOfGame.length > 10){
-      setConfirmDateOfGame({state: true, msg: 'Check the date of game'})
-      setConfirmMatch(false)
-    }
-  }
+
 
   const newRider = (riderNumber) => {
     for (let i = 0; i < match.riders.length; i++) {
@@ -65,6 +58,7 @@ const Speedway = () => {
         break
       }
     }
+    match.seasonGame.link = match.seasonGame.link.replaceAll('/', '*')
     navigate(`/newRider/${JSON.stringify(match)}`)
   }
 
@@ -74,13 +68,7 @@ const Speedway = () => {
     setConfirmMatch(false)
   }
 
-  const confirmRidersStartingNumbers = () => {
-    let numb = ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16']
-    if(match.riders.some((rider) => !numb.includes(rider.nr))){
-      setConfirmStartingNumbers({state: true, msg: 'Check starting numbers'})
-      setConfirmMatch(false)
-    }
-  }
+
 
   const confirmMatchFunction = () => {
     if (match.riders.some(x => x.edit === undefined))
@@ -154,6 +142,10 @@ const Speedway = () => {
     navigate(`/`)
   }
 
+  const validateGame = (state) => {
+    console.log('STATE: ' + state)
+  }
+
   return (
 
     <div>
@@ -195,6 +187,13 @@ const Speedway = () => {
             onClick={confirmButton}
           >Confirm</button>
         }
+
+        <Validator
+          match={match}
+          validateGame={validateGame}
+        />  
+
+
         <div>
           {message.state &&
             message.msg
@@ -208,16 +207,6 @@ const Speedway = () => {
         <div>
           {ageMessageWarning.state &&
             ageMessageWarning.msg
-          }
-        </div>
-        <div>
-          {confirmStartingNumbers.state &&
-            confirmStartingNumbers.msg
-          }
-        </div>
-        <div>
-          {confirmDateOfGame.state &&
-            confirmDateOfGame.msg
           }
         </div>
       </div>
