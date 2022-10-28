@@ -15,14 +15,23 @@ const ResultValidator = (props) => {
         }
     }
 
+    const confirmResultFunction = () => {
+        console.log('confirm anyway')
+    }
+
     useEffect(() => {
         calculateResultReliability()
     }, [])
 
     return (
         <div>
-            {confirmResult &&
-                confirmResult.msg}
+            {confirmResult.state &&
+                <div>
+                    {confirmResult.msg}&nbsp;
+                    <button
+                        onClick={confirmResultFunction}
+                    >Confirm Result Anyway</button>
+                </div>}
         </div>
     )
 }

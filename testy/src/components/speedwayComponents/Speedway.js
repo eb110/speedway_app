@@ -21,7 +21,7 @@ const Speedway = () => {
   useEffect(() => {
     const updateRiders = async () => {
       await new SpeedwayRider().fetchRidersFromDB(match, match.riders.length - 1)
-        .then((res) => setMatch(Object.assign({}, res))).then(() => setValidator(true))
+        .then((res) => setMatch(Object.assign({}, res))).then(() => setValidator(true)).then(() => console.log(match))
     }
 
     if (match.fetchRidersFromDB === true) {
@@ -42,15 +42,6 @@ const Speedway = () => {
     }
     match.seasonGame.link = match.seasonGame.link.replaceAll('/', '*')
     navigate(`/newRider/${JSON.stringify(match)}`)
-  }
-
-  const updateTheMatchFromTeamComponent = (homeAway, team) => {
-    match[homeAway + "Team"] = team
-    setMatch(Object.assign({}, match))
-  }
-
-  const updateConfirmTeams = (homeAway) => {
-    match[homeAway + "Confirmed"] = true;
   }
 
   const updateRidersScoring = () => {
@@ -99,8 +90,6 @@ const Speedway = () => {
       <Team
         match={match}
         homeAway={'away'}
-        updateMatchComponent={updateTheMatchFromTeamComponent}
-        updateTeamConfirm={updateConfirmTeams}
       />
       <RidersComponent
         match={match}
@@ -110,8 +99,6 @@ const Speedway = () => {
       <Team
         match={match}
         homeAway={'home'}
-        updateMatchComponent={updateTheMatchFromTeamComponent}
-        updateTeamConfirm={updateConfirmTeams}
       />
       <RidersComponent
         match={match}
