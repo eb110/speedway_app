@@ -15,11 +15,8 @@ const Speedway = () => {
   const [match, setMatch] = useState(JSON.parse(useParams().matchDetails))
   const [message, setMessage] = useState({ state: false, msg: '' })
   const [messageResultCalc, setMessageResultCalc] = useState({ state: false, msg: '' })
-  const [ageMessageWarning, setAgeMessageWarning] = useState({ state: false, msg: '' })
   const [confirmMatch, setConfirmMatch] = useState(false)
  
-
-
   match.year = match.seasonGame.season.year
   match.seasonGame.link = match.seasonGame.link.replaceAll('*', '/')
 
@@ -30,9 +27,6 @@ const Speedway = () => {
     const updateRiders = async () => {
       await new SpeedwayRider().fetchRidersFromDB(match, match.riders.length - 1)
         .then((res) => setMatch(Object.assign({}, res))).then(() => confirmMatchFunction())
-        .then((res) => {
-          calculateAgeLimits()
-        })
     }
 
     if (match.fetchRidersFromDB === true) {
@@ -68,8 +62,6 @@ const Speedway = () => {
     setConfirmMatch(false)
   }
 
-
-
   const confirmMatchFunction = () => {
     if (match.riders.some(x => x.edit === undefined))
       return
@@ -91,16 +83,6 @@ const Speedway = () => {
     }
     else {
       setMessageResultCalc({ state: false, msg: '' })
-    }
-  }
-
-  const calculateAgeLimits = () => {
-    let ageMistake = match.riders.filter((rider) => rider.seasonAge < 16 || rider.seasonAge > 40)
-    if (ageMistake.length > 0) {
-      let msg = 'Check the age of riders: '
-      for (let i = 0; i < ageMistake.length; i++)
-        msg += ageMistake[i].surname + ' '
-      setAgeMessageWarning({ state: true, msg: msg })
     }
   }
 
@@ -192,8 +174,7 @@ const Speedway = () => {
           match={match}
           validateGame={validateGame}
         />  
-
-
+        
         <div>
           {message.state &&
             message.msg
@@ -202,11 +183,6 @@ const Speedway = () => {
         <div>
           {messageResultCalc.state &&
             messageResultCalc.msg
-          }
-        </div>
-        <div>
-          {ageMessageWarning.state &&
-            ageMessageWarning.msg
           }
         </div>
       </div>
