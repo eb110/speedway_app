@@ -14,9 +14,7 @@ const Speedway = () => {
   const navigate = useNavigate()
   const [match, setMatch] = useState(JSON.parse(useParams().matchDetails))
   const [message, setMessage] = useState({ state: false, msg: '' })
-  const [confirmMatch, setConfirmMatch] = useState(false)
- 
-  match.year = match.seasonGame.season.year
+
   match.seasonGame.link = match.seasonGame.link.replaceAll('*', '/')
 
   useEffect(() => {
@@ -32,13 +30,8 @@ const Speedway = () => {
     }
 
     confirmMatchFunction()
-    levelOfGame()
 
   }, [])
-
-  const levelOfGame = () => {
-      match.league = match.seasonGame.level
-  }
 
   const newRider = (riderNumber) => {
     for (let i = 0; i < match.riders.length; i++) {
@@ -54,14 +47,14 @@ const Speedway = () => {
   const updateTheMatchFromTeamComponent = (homeAway, team) => {
     match[homeAway + "Team"] = team
     setMatch(Object.assign({}, match))
-    setConfirmMatch(false)
+  //  setConfirmMatch(false)
   }
 
   const confirmMatchFunction = () => {
     if (match.riders.some(x => x.edit === undefined))
       return
     if (match.homeConfirmed && match.awayConfirmed) {
-      setConfirmMatch(true)
+  //    setConfirmMatch(true)
     }
   }
 
@@ -81,9 +74,8 @@ const Speedway = () => {
     }
   }
 
-  const confirmButton = async () => {
+  const confirmMatch = async () => {
     updateRidersScoring()
-    setConfirmMatch(false)
     let datka = match.dateOfGame.split('-')
     let datkaWsad = datka[2] + '-' + (datka[1].length === 1 ? '0' + datka[1] : datka[1]) + '-' + (datka[0].length === 1 ? '0' + datka[0] : datka[0]);
     try {
@@ -106,10 +98,6 @@ const Speedway = () => {
 
   const backHome = (event) => {
     navigate(`/`)
-  }
-
-  const validateGame = (state) => {
-    console.log('STATE: ' + state)
   }
 
   return (
@@ -146,15 +134,9 @@ const Speedway = () => {
       />
 
       <div>
-        {confirmMatch &&
-          <button
-            onClick={confirmButton}
-          >Confirm</button>
-        }
-
         <Validator
           match={match}
-          validateGame={validateGame}
+          confirmMatch={confirmMatch}
         />  
 
         <div>
