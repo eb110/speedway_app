@@ -1,5 +1,6 @@
 import AgeValidator from "./AgeValidator";
 import GameDateValidator from "./GameDateValidator";
+import ResultValidator from "./ResultValidator";
 import RiderStartingNumberValidator from "./RiderStartingNumberValidator";
 
 const Validator = (props) => {
@@ -18,6 +19,10 @@ const Validator = (props) => {
                 validateGame={validateGame}
             />
             <AgeValidator
+                match={match}
+                validateGame={validateGame}
+            />
+            <ResultValidator
                 match={match}
                 validateGame={validateGame}
             />

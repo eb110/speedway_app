@@ -1,81 +1,14 @@
-import React, { useEffect, useState } from 'react';
 import Flags from '../../utility/Flags.js'
 
 const Points = (props) => {
 
-    let match = props.match
     let rider = props.rider
     let obtainRiderNr = props.obtainRiderNr
-    let sendUpdatedResultToMatchPage = props.sendUpdatedResultToMatchPage
     let flag = new Flags().flag
-
-    const [pointsString, setPointsString] = useState(rider.pointsString)
 
     const editRider = (event) => {
         let riderNr = event.target.name
         obtainRiderNr(riderNr)
-    }
-
-    const handlePointsStringChange = (event) => {
-        const { value } = event.target
-        recalculatePoints(value)
-        setPointsString(value)
-    }
-
-    const recalculatePoints = (pointsString) => {
-        let riderPoints = {
-            bonus: 0,
-            point: 0.0,
-            heat: 0,
-            paidPerfect: 0,
-            fullPerfect: 0,
-            pointsString: pointsString
-        }
-        let points = pointsString.split(',').filter((x) => x !== '-')
-        for (let i = 0; i < points.length; i++) {
-            let heatRecord = points[i];
-            if (heatRecord.includes(".")) {
-                riderPoints.point += parseFloat(heatRecord.substring(0, 3));
-            }
-            else if ('0123456789'.includes(heatRecord[0]))
-                riderPoints.point += +("" + heatRecord[0])
-            if (heatRecord.includes("*"))
-                riderPoints.bonus++;
-            riderPoints.heat++;
-        }
-        if (riderPoints.heat >= 5 && riderPoints.point / riderPoints.heat === 3) {
-            riderPoints.fullPerfect++;
-        }
-        else if (riderPoints.heat >= 5 && (riderPoints.point + riderPoints.bonus) / riderPoints.heat === 3) {
-            riderPoints.paidPerfect++;
-        }
-        updateRiderPoints(riderPoints)
-    }
-    const updateRiderPoints = (recalculatedPoints) => {
-        rider.bonusesCurrent = recalculatedPoints.bonus
-        rider.fullPerfectsCurrent = recalculatedPoints.fullPerfect
-        rider.paidPerfectsCurrent = recalculatedPoints.paidPerfect
-        rider.heatsCurrent = recalculatedPoints.heat
-        rider.pointsCurrent = recalculatedPoints.point
-        rider.pointsString = recalculatedPoints.pointsString
-
-        updateResult(rider)
-    }
-    const updateResult = (riderToUpdate) => {
-        let side = rider.homeAway
-        let result = 0
-        let heats = 0
-        for (let i = 0; i < match.riders.length; i++) {
-            if (match.riders[i].id === riderToUpdate.id)
-                match.riders[i] = riderToUpdate
-            if (match.riders[i].homeAway === side) {
-                result += match.riders[i].pointsCurrent
-                heats += match.riders[i].heatsCurrent
-            }
-        }
-        match[side + 'ResultPoints'] = result
-        match[side + 'Heats'] = heats
-        sendUpdatedResultToMatchPage()
     }
 
     return (
@@ -136,11 +69,7 @@ const Points = (props) => {
                     margin: '1px'
                 }}
             >
-                <input
-                    style={{ width: "80%" }}
-                    value={pointsString}
-                    onChange={handlePointsStringChange}
-                />
+                {rider.pointsString}&nbsp;
                 {rider.perfect && <b> X</b>}
             </div>
             <div

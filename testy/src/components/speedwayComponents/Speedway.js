@@ -14,15 +14,12 @@ const Speedway = () => {
   const navigate = useNavigate()
   const [match, setMatch] = useState(JSON.parse(useParams().matchDetails))
   const [message, setMessage] = useState({ state: false, msg: '' })
-  const [messageResultCalc, setMessageResultCalc] = useState({ state: false, msg: '' })
   const [confirmMatch, setConfirmMatch] = useState(false)
  
   match.year = match.seasonGame.season.year
   match.seasonGame.link = match.seasonGame.link.replaceAll('*', '/')
 
   useEffect(() => {
-
-    calculateResultReliability()
 
     const updateRiders = async () => {
       await new SpeedwayRider().fetchRidersFromDB(match, match.riders.length - 1)
@@ -42,8 +39,6 @@ const Speedway = () => {
   const levelOfGame = () => {
       match.league = match.seasonGame.level
   }
-
-
 
   const newRider = (riderNumber) => {
     for (let i = 0; i < match.riders.length; i++) {
@@ -73,17 +68,6 @@ const Speedway = () => {
   const updateConfirmTeams = (homeAway) => {
     match[homeAway + "Confirmed"] = true;
     confirmMatchFunction()
-  }
-
-  const calculateResultReliability = () => {
-    const pts = match.awayResultPoints + match.homeResultPoints
-    const bg = match.awayHeats + match.homeHeats
-    if (pts !== 90 || bg !== 60) {
-      setMessageResultCalc({ state: true, msg: 'CHECK THE RESULT: Points: ' + pts + ' Heats: ' + bg })
-    }
-    else {
-      setMessageResultCalc({ state: false, msg: '' })
-    }
   }
 
   const updateRidersScoring = () => {
@@ -146,7 +130,6 @@ const Speedway = () => {
         match={match}
         homeAway='away'
         createNewRider={newRider}
-        updateSpeedwayMatchResult={calculateResultReliability}
       />
       <div>
         <Team
@@ -160,7 +143,6 @@ const Speedway = () => {
         match={match}
         homeAway='home'
         createNewRider={newRider}
-        updateSpeedwayMatchResult={calculateResultReliability}
       />
 
       <div>
@@ -174,15 +156,10 @@ const Speedway = () => {
           match={match}
           validateGame={validateGame}
         />  
-        
+
         <div>
           {message.state &&
             message.msg
-          }
-        </div>
-        <div>
-          {messageResultCalc.state &&
-            messageResultCalc.msg
           }
         </div>
       </div>
