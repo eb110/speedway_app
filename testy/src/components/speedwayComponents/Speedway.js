@@ -14,23 +14,23 @@ const Speedway = () => {
   const navigate = useNavigate()
   const [match, setMatch] = useState(JSON.parse(useParams().matchDetails))
   const [message, setMessage] = useState({ state: false, msg: '' })
+  const [validator, setValidator] = useState(false);
 
   match.seasonGame.link = match.seasonGame.link.replaceAll('*', '/')
 
   useEffect(() => {
-
     const updateRiders = async () => {
       await new SpeedwayRider().fetchRidersFromDB(match, match.riders.length - 1)
-        .then((res) => setMatch(Object.assign({}, res))).then(() => confirmMatchFunction())
+        .then((res) => setMatch(Object.assign({}, res))).then(() => setValidator(true))
     }
 
     if (match.fetchRidersFromDB === true) {
       updateRiders()
       match.fetchRidersFromDB = false
     }
-
-    confirmMatchFunction()
-
+    else{
+      setValidator(true)
+    }
   }, [])
 
   const newRider = (riderNumber) => {
@@ -47,24 +47,14 @@ const Speedway = () => {
   const updateTheMatchFromTeamComponent = (homeAway, team) => {
     match[homeAway + "Team"] = team
     setMatch(Object.assign({}, match))
-  //  setConfirmMatch(false)
-  }
-
-  const confirmMatchFunction = () => {
-    if (match.riders.some(x => x.edit === undefined))
-      return
-    if (match.homeConfirmed && match.awayConfirmed) {
-  //    setConfirmMatch(true)
-    }
   }
 
   const updateConfirmTeams = (homeAway) => {
     match[homeAway + "Confirmed"] = true;
-    confirmMatchFunction()
   }
 
   const updateRidersScoring = () => {
-    for(let i = 0; i < match.riders.length; i++){
+    for (let i = 0; i < match.riders.length; i++) {
       match.riders[i].bonuses += match.riders[i].bonusesCurrent
       match.riders[i].points += match.riders[i].pointsCurrent
       match.riders[i].heats += match.riders[i].heatsCurrent
@@ -85,7 +75,7 @@ const Speedway = () => {
         .then(() => new SpeedwayMatchRider().postMatchRiders(match, match.riders.length - 1))
         .then(() => new SpeedwayRider().updateRiders(match, match.riders.length - 1))
         .then(() => { new InsertedMatch().insertMatch(match.seasonGame.link); setMessage({ state: true, msg: 'The match has been uploaded' }) })
-        .then(() => {match.seasonGame.inserted = true; new SeasonGames().updateSeasonGame(match.seasonGame)})
+        .then(() => { match.seasonGame.inserted = true; new SeasonGames().updateSeasonGame(match.seasonGame) })
     } catch (error) {
       match.seasonGame.inserted = false
       console.log('confirm of the match results failed')
@@ -106,44 +96,37 @@ const Speedway = () => {
       <div>
         Data: {match.dateOfGame} - {match.seasonGame.level}
       </div>
-      <div>
-        <Team
-          match={match}
-          homeAway={'away'}
-          updateMatchComponent={updateTheMatchFromTeamComponent}
-          updateTeamConfirm={updateConfirmTeams}
-        />
-      </div>
+      <Team
+        match={match}
+        homeAway={'away'}
+        updateMatchComponent={updateTheMatchFromTeamComponent}
+        updateTeamConfirm={updateConfirmTeams}
+      />
       <RidersComponent
         match={match}
         homeAway='away'
         createNewRider={newRider}
       />
-      <div>
-        <Team
-          match={match}
-          homeAway={'home'}
-          updateMatchComponent={updateTheMatchFromTeamComponent}
-          updateTeamConfirm={updateConfirmTeams}
-        />
-      </div>
+      <Team
+        match={match}
+        homeAway={'home'}
+        updateMatchComponent={updateTheMatchFromTeamComponent}
+        updateTeamConfirm={updateConfirmTeams}
+      />
       <RidersComponent
         match={match}
         homeAway='home'
         createNewRider={newRider}
       />
-
-      <div>
+      {validator &&
         <Validator
           match={match}
           confirmMatch={confirmMatch}
-        />  
-
-        <div>
-          {message.state &&
-            message.msg
-          }
-        </div>
+        />}
+      <div>
+        {message.state &&
+          message.msg
+        }
       </div>
       <div>
         <button

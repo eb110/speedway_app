@@ -3,6 +3,7 @@ import GameDateValidator from "./GameDateValidator";
 import ResultValidator from "./ResultValidator";
 import RiderStartingNumberValidator from "./RiderStartingNumberValidator";
 import React, { useState } from 'react';
+import RiderDbExistenceValidator from "./RiderDbExistenceValidator";
 
 const Validator = (props) => {
 
@@ -36,6 +37,10 @@ const Validator = (props) => {
             <ResultValidator
                 match={match}
                 validateGame={validateGame}
+            />
+            <RiderDbExistenceValidator
+                   match={match}
+                   validateGame={validateGame}
             />
             {confirm &&
                 <div>
