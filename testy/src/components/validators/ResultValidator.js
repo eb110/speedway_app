@@ -7,8 +7,8 @@ const ResultValidator = (props) => {
     const [confirmResult, setConfirmResult] = useState({ state: false, msg: '' })
 
     const calculateResultReliability = () => {
-        const pts = match.awayResultPoints + match.homeResultPoints
-        const bg = match.awayHeats + match.homeHeats
+        const pts = match.homeResultPoints + match.awayResultPoints
+        const bg = match.homeHeats + match.awayHeats
         if (pts !== 90 || bg !== 60) {
             setConfirmResult({ state: true, msg: 'CHECK THE RESULT: Points: ' + pts + ' Heats: ' + bg })
             validateGame('result validator')
@@ -16,7 +16,8 @@ const ResultValidator = (props) => {
     }
 
     const confirmResultFunction = () => {
-        console.log('confirm anyway')
+        setConfirmResult({state: false, msg: ''})
+        validateGame(false)
     }
 
     useEffect(() => {

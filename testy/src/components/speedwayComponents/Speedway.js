@@ -21,17 +21,96 @@ const Speedway = () => {
   useEffect(() => {
     const updateRiders = async () => {
       await new SpeedwayRider().fetchRidersFromDB(match, match.riders.length - 1)
-        .then((res) => setMatch(Object.assign({}, res))).then(() => setValidator(true)).then(() => console.log(match))
+        .then((res) => setMatch(Object.assign({}, res)))
+        .then(() => countRidersPoints())
     }
 
     if (match.fetchRidersFromDB === true) {
       updateRiders()
       match.fetchRidersFromDB = false
     }
-    else{
+    else {
       setValidator(true)
     }
   }, [])
+
+  const countResult = () => {
+    let tempmatch = match
+    tempmatch.awayResultPoints = 0
+    tempmatch.homeResultPoints = 0
+    tempmatch.awayHeats = 0
+    tempmatch.homeHeats = 0
+    tempmatch.bonuses = 0
+    tempmatch.heats = 0
+    tempmatch.games = 0
+    tempmatch.paidPerfects = 0
+    tempmatch.fullPerfects = 0
+    tempmatch.points = 0
+    for(let i = 0; i < tempmatch.riders.length; i++){
+        let rd = tempmatch.riders[i]
+        if(rd.homeAway === 'away'){
+          tempmatch.awayResultPoints += rd.pointsCurrent
+          tempmatch.awayHeats += rd.heatsCurrent
+        }else{
+          tempmatch.homeResultPoints += rd.pointsCurrent
+          tempmatch.homeHeats += rd.heatsCurrent
+        }
+        tempmatch.bonuses += rd.bonusesCurrent
+        tempmatch.heats += rd.heatsCurrent
+        tempmatch.games++
+        tempmatch.paidPerfects += rd.paidPerfectsCurrent
+        tempmatch.fullPerfects += rd.fullPerfectsCurrent
+        tempmatch.points += rd.pointsCurrent
+    }
+    setMatch(Object.assign({}, tempmatch))
+    setValidator(true)
+    console.log(match)
+}
+
+const countRidersPoints = () => {
+    for (let i = 0; i < match.riders.length; i++) {
+        match.riders[i].pointsString = match.riders[i].pointsString.replaceAll(' ', '')
+        let points = match.riders[i].pointsString.split(',').filter((x) => x !== '-')
+        let bonus = 0;
+        let point = 0.0
+        let heat = 0
+        let fullPerfect = 0
+        let paidPerfect = 0
+        for (let j = 0; j < points.length; j++) {
+            let heatRecord = points[j];
+            let pointTemp = 0.0;
+            if (heatRecord.includes(".")) {
+                pointTemp = parseFloat(heatRecord.substring(0, 3));
+            }
+            else if ('0123456789'.includes(heatRecord[0]))
+                pointTemp = +("" + heatRecord[0])
+            if (heatRecord.includes("*"))
+                bonus++;
+            point += pointTemp;
+            heat++;
+        }
+
+        if (heat >= 5 && point / heat === 3) {
+            fullPerfect++;
+        }
+        else if (heat >= 5 && (point + bonus) / heat === 3) {
+            paidPerfect++;
+        }
+        match.riders[i].heatsCurrent = heat
+        match.riders[i].heats += heat
+        match.riders[i].pointsCurrent = point
+        match.riders[i].points += point
+        match.riders[i].bonusesCurrent = bonus
+        match.riders[i].bonuses += bonus
+        match.riders[i].fullPerfectsCurrent = fullPerfect
+        match.riders[i].fullPerfects += fullPerfect
+        match.riders[i].paidPerfectsCurrent = paidPerfect
+        match.riders[i].paidPerfects += paidPerfect
+        match.riders[i].games++
+        match.riders[i].perfect = (fullPerfect > 0 || paidPerfect > 0) ? true : false
+    }
+    countResult()
+}
 
   const newRider = (riderNumber) => {
     for (let i = 0; i < match.riders.length; i++) {
@@ -44,19 +123,7 @@ const Speedway = () => {
     navigate(`/newRider/${JSON.stringify(match)}`)
   }
 
-  const updateRidersScoring = () => {
-    for (let i = 0; i < match.riders.length; i++) {
-      match.riders[i].bonuses += match.riders[i].bonusesCurrent
-      match.riders[i].points += match.riders[i].pointsCurrent
-      match.riders[i].heats += match.riders[i].heatsCurrent
-      match.riders[i].paidPerfects += match.riders[i].paidPerfectsCurrent
-      match.riders[i].fullPerfects += match.riders[i].fullPerfectsCurrent
-      match.riders[i].games++
-    }
-  }
-
   const confirmMatch = async () => {
-    updateRidersScoring()
     let datka = match.dateOfGame.split('-')
     let datkaWsad = datka[2] + '-' + (datka[1].length === 1 ? '0' + datka[1] : datka[1]) + '-' + (datka[0].length === 1 ? '0' + datka[0] : datka[0]);
     try {
@@ -87,29 +154,30 @@ const Speedway = () => {
       <div>
         Data: {match.dateOfGame} - {match.seasonGame.level}
       </div>
-      <Team
-        match={match}
-        homeAway={'away'}
-      />
-      <RidersComponent
-        match={match}
-        homeAway='away'
-        createNewRider={newRider}
-      />
-      <Team
-        match={match}
-        homeAway={'home'}
-      />
-      <RidersComponent
-        match={match}
-        homeAway='home'
-        createNewRider={newRider}
-      />
       {validator &&
-        <Validator
-          match={match}
-          confirmMatch={confirmMatch}
-        />}
+        <div>
+          <Team
+            match={match}
+            homeAway={'away'}
+          />
+          <RidersComponent
+            match={match}
+            homeAway='away'
+            createNewRider={newRider}
+          />
+          <Team
+            match={match}
+            homeAway={'home'}
+          />
+          <RidersComponent
+            match={match}
+            homeAway='home'
+            createNewRider={newRider}
+          />
+          <Validator
+            match={match}
+            confirmMatch={confirmMatch}
+          /></div>}
       <div>
         {message.state &&
           message.msg

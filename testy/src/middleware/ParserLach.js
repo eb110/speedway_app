@@ -8,40 +8,19 @@ class ParserLach {
     constructor(data) {
         this.data = data;
         this.home = ''
-        this.fullHomeName = undefined
-        this.fullAwayName = undefined
         this.away = ''
         this.round = ''
         this.league = ''
         this.dateOfGame = null
-        this.homeRiders = []
-        this.awayRiders = []
         this.official = ""
         this.riders = []
         this.fetchRidersFromDB = true
-        this.awayResultPoints = 0.0
-        this.homeResultPoints = 0.0
-        this.awayHeats = 0
-        this.homeHeats = 0
-        this.homeConfirmed = false
-        this.awayConfirmed = false
         this.roundAndLeagueParser()
         this.teamsNamesParser()
         this.dateOfGameParser()
-        this.teamParser(1, this.awayRiders)
-        this.teamParser(2, this.homeRiders)
+        this.teamParser(1)
+        this.teamParser(2)
         this.parseOfficial()
-        this.consolidateRiders();
-
-        let res = this.countResult(this.awayRiders)
-        this.awayResultPoints = res[0]
-        this.awayHeats = res[1]
-        this.awayRiders = res[2]
-        res = this.countResult(this.homeRiders)
-        this.homeResultPoints = res[0]
-        this.homeHeats = res[1]
-        this.homeRiders = res[2]
-
     }
 
     roundAndLeagueParser() {
@@ -50,30 +29,6 @@ class ParserLach {
         this.round = this.data.substring(this.data.indexOf('RUNDA') - 4, this.data.indexOf('RUNDA') - 1).replaceAll(' ', '')
         if (this.round.length === 0)
             this.round = 'PO'
-    }
-
-    consolidateRiders() {
-        for (let i = 0; i < this.awayRiders.length; i++) {
-            let wsad = this.awayRiders[i]
-            wsad.homeAway = 'away'
-            this.riders.push(wsad)
-        }
-        for (let i = 0; i < this.homeRiders.length; i++) {
-            let wsad = this.homeRiders[i]
-            wsad.homeAway = 'home'
-            this.riders.push(wsad)
-        }
-    }
-
-    checkSurnameCorrection(surname) {
-        let wrongRlachSurnames = ['DRAPAŁA', 'PAWLICZSK', 'MIEDZIŃSI', 'KWIDZYŃSKI']
-        let correctSurnames = ['Dropała', 'Pawliczek', 'Miedziński', 'Kwidziński']
-        for (let i = 0; i < wrongRlachSurnames.length; i++) {
-            if (wrongRlachSurnames[i] === surname) {
-                return correctSurnames[i]
-            }
-        }
-        return surname;
     }
 
     teamsNamesParser() {
@@ -93,7 +48,7 @@ class ParserLach {
         this.dateOfGame = this.dateOfGame.replace(/[^0-9-]/gi, '')
     }
 
-    teamParser(flag, arr) {
+    teamParser(flag) {
         let base = ""
         if (flag === 1) {
             base = this.data.substring(0, this.data.indexOf('\n     '))
@@ -108,14 +63,6 @@ class ParserLach {
         base = base.filter((riderData) => !riderData.includes('brak zawodnika'))
         for (let i = 0; i < base.length; i++) {
             let wsad = base[i]
-            // let wrongData = ['L MATYSIAK', 'G.LUBERA', 'W, ZAŁUSKI']
-            // let correctData = ['L.MATYSIAK', 'R.LUBERA', 'W.ZAŁUSKI']
-            // for (let j = 0; j < wrongData.length; j++) {
-            //     if (wsad.includes(wrongData[j])) {
-            //         wsad = wsad.replace(wrongData[j], correctData[j])
-            //         break
-            //     }
-            // }
             let rider = {}
             rider.nr = wsad.substring(0, wsad.indexOf(' '))
             wsad = wsad.substring(wsad.indexOf(' ') + 1)
@@ -127,13 +74,15 @@ class ParserLach {
                 rider.surname = rider.surname.substring(0, rider.surname.indexOf(' '))
             }
             rider.pointsString = wsad.substring(wsad.indexOf('(') + 1, wsad.indexOf(')'))
-            //as there is an issue with '/-' during the render
-            //if rider has had an accident and has been replaced then the 'z' letter
-            //is provided
             rider.pointsString = rider.pointsString.replaceAll('/', 'z')
             rider.pointsString = rider.pointsString.replaceAll('?', 'X')
-          //  rider.surname = this.checkSurnameCorrection(rider.surname)
-            arr.push(rider)
+            if(flag === 1){
+                rider.homeAway = 'away'
+            }else{
+                rider.homeAway = 'home'
+            }
+
+            this.riders.push(rider)
         }
     }
 
@@ -144,52 +93,6 @@ class ParserLach {
         this.official += this.data.substring(0, this.data.indexOf(' '))
         this.official = this.official.trim()
         this.data = ''
-    }
-
-    countResult(riders) {
-        let result = 0.0
-        let heats = 0
-        for (let i = 0; i < riders.length; i++) {
-            riders[i].pointsString = riders[i].pointsString.replaceAll(' ', '')
-            let points = riders[i].pointsString.split(',').filter((x) => x !== '-')
-            let bonus = 0;
-            let point = 0.0
-            let heat = 0
-            let fullPerfect = 0
-            let paidPerfect = 0
-            for (let j = 0; j < points.length; j++) {
-                let heatRecord = points[j];
-                let pointTemp = 0.0;
-                if (heatRecord.includes(".")) {
-                    pointTemp = parseFloat(heatRecord.substring(0, 3));
-                }
-                else if ('0123456789'.includes(heatRecord[0]))
-                    pointTemp = +("" + heatRecord[0])
-                if (heatRecord.includes("*"))
-                    bonus++;
-                point += pointTemp;
-                result += pointTemp;
-                heats++;
-                heat++;
-            }
-
-            if (heat >= 5 && point / heat === 3) {
-                fullPerfect++;
-            }
-            else if (heat >= 5 && (point + bonus) / heat === 3) {
-                paidPerfect++;
-            }
-            riders[i].heats = heat
-            riders[i].points = point
-            riders[i].bonuses = bonus
-            riders[i].games = 1
-            riders[i].fullPerfects = fullPerfect
-            riders[i].paidPerfects = paidPerfect
-            riders[i].currentFullPerfect = fullPerfect
-            riders[i].currentPaidPerfect = paidPerfect
-            riders[i].perfect = (fullPerfect > 0 || paidPerfect > 0) ? true : false
-        }
-        return [result, heats, riders]
     }
 
 }

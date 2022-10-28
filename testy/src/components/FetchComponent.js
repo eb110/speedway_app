@@ -32,7 +32,6 @@ const FetchComponent = (props) => {
                     })
                         .then((res) => new EncoderLatin(res.data))
                         .then((enc) => JSON.stringify(new ParserLach(enc.str)))
-                        .then((res) => new InsertedMatch().addLinkToMatchJson(axiosUrl, res))
                         .then((parameter) => {
                             let tempParameter = JSON.parse(parameter)
                             tempParameter.seasonGame = seasonGame
