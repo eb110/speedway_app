@@ -5,14 +5,12 @@ const AgeValidator = (props) => {
     let match = props.match
     const validateGame = props.validateGame
     const [confirmAge, setConfirmAge] = useState({ state: false, msg: '' })
-    match.riders[0].seasonAge = 15
-    match.riders[1].seasonAge = 38
 
     const calculateAgeLimits = () => {
         let tooYoung = match.riders.filter((rider) => rider.seasonAge < 16)
         let oldPricks = match.riders.filter((rider) => rider.seasonAge > 35)
         if (tooYoung.length > 0)
-            validateGame('age validator')
+            validateGame()
 
         if (tooYoung.length > 0 || oldPricks.length > 0) {
             let msg = 'Check the age of riders: '

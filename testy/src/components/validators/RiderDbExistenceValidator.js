@@ -7,9 +7,9 @@ const RiderDbExistenceValidator = (props) => {
     const [riderValidator, setRiderValidator] = useState({ state: false, msg: '' })
 
     const confirmRidersDbExistence = () => {
-        if(match.riders.some((rider) => rider.id === undefined)){
+        if(match.riders.some((rider) => rider.riderDB === undefined)){
             setRiderValidator({state: true, msg: 'Update riders'})
-            validateGame('rider validator')
+            validateGame()
         }
     }
 

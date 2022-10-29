@@ -9,14 +9,22 @@ const Validator = (props) => {
 
     let match = props.match
     let confirmMatch = props.confirmMatch
-    const [confirm, setConfirm] = useState(false)
+    const [confirm, setConfirm] = useState(true)
+    const [validatorsCounter, setValidatorCounter] = useState(0)
 
-    const validateGame = (state) => {
+    const validateGame = () => {
+        setValidatorCounter(validatorsCounter + 1)
         if (confirm !== false)
             setConfirm(false)
     }
 
-    const confirmGame = () => {
+    const resultDoubleConfirmation = () => {
+        console.log(validatorsCounter)
+        if(validatorsCounter === 1)
+            setConfirm(true)
+    }
+
+    const confirmGame = (state) => {
         confirmMatch()
     }
 
@@ -35,6 +43,7 @@ const Validator = (props) => {
                 validateGame={validateGame}
             />
             <ResultValidator
+                secondValidator={resultDoubleConfirmation}
                 match={match}
                 validateGame={validateGame}
             />
