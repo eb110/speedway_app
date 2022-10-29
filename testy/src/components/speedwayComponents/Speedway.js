@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom'
-import RidersComponent from './RidersComponent';
 import RiderModel from '../../modelController/RiderModel';
 import InsertedMatch from '../../modelController/InsertedMatch';
 import Teams from './Teams';
@@ -37,17 +36,6 @@ const Speedway = () => {
     }
   }, [])
 
-  const newRider = (riderNumber) => {
-    for (let i = 0; i < match.riders.length; i++) {
-      if (match.riders[i].nr === riderNumber) {
-        match.riders[i].edit = true
-        break
-      }
-    }
-    match.seasonGame.link = match.seasonGame.link.replaceAll('/', '*')
-    navigate(`/newRider/${JSON.stringify(match)}`)
-  }
-
   const confirmMatch = async () => {
     let datka = match.dateOfGame.split('-')
     let datkaWsad = datka[2] + '-' + (datka[1].length === 1 ? '0' + datka[1] : datka[1]) + '-' + (datka[0].length === 1 ? '0' + datka[0] : datka[0]);
@@ -74,7 +62,6 @@ const Speedway = () => {
   }
 
   return (
-
     <div>
       <div>
         Data: {match.dateOfGame} - {match.seasonGame.level}
@@ -103,7 +90,6 @@ const Speedway = () => {
         >Home</button>
       </div>
     </div>
-
   );
 }
 

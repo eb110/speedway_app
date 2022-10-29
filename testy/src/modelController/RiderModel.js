@@ -138,11 +138,6 @@ export default class RiderModel {
         }
     }
 
-    /*
-        match - global match with updated parameter values
-        all riders already exist in db, same teams
-        index - last index of the match.riders list
-    */
     async updateRiders(match, index) {
         if (index < 0)
             return
@@ -162,7 +157,6 @@ export default class RiderModel {
                 },
                 body: JSON.stringify(rdr)
             });
-           // console.log('speedway rider update')
         } catch (error) {
             console.log('update rider failed')
         }

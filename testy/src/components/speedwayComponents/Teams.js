@@ -30,7 +30,6 @@ const Teams = (props) => {
                     match.teams[1].side = 'Goście'
                 })
                 .then(() => setDisplay(true))
-                .then(() => console.log('teams'))
         } else {
             setDisplay(true)
         }

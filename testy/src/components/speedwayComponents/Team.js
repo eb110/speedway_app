@@ -21,6 +21,7 @@ const Team = (props) => {
                     >
                         <Rider
                             rider={rider}
+                            match={match}
                         />
                     </div>
                 ))}

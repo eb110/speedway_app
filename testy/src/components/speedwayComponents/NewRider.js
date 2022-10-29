@@ -2,15 +2,17 @@ import React, {useState} from 'react';
 import {useNavigate} from 'react-router-dom'
 import RiderModel from '../../modelController/RiderModel';
 
-const NewRiderComponent = (props) => {
+const NewRider = (props) => {
 
     const navigate = useNavigate()
 
-    let match = JSON.parse(props.matchDetails)
+    let match = JSON.parse(props.match)
     let index = ''
+
     for(let i = 0; i < match.riders.length; i++){
-        if(match.riders[i].edit){
+        if(match.riders[i].riderDB === 'newRider'){
             index = i
+            match.riders[i].riderDB = {}
             break
         }
     }
@@ -68,7 +70,6 @@ const NewRiderComponent = (props) => {
     const postNewRider = async () => {
         let datka = Date.now();
         let speedway_rider = {
-            /*Related to card_006*/
             birthDate: riderDOB,
             bonuses: 0,
             countryOfBirth: riderCOB,
@@ -86,11 +87,9 @@ const NewRiderComponent = (props) => {
             lastUpdated: datka
         }
 
-        match.riders[index].edit = false
-
         await new RiderModel().postNewRider(speedway_rider)
         .then(() => new RiderModel().getTheLastRider())
-        .then((res) => match.riders[index] = new RiderModel().concatRiderParserWithRiderDB(match.riders[index], [res], match.dateOfGame))
+        .then((res) => match.riders[index].riderDB = new RiderModel().concatRiderParserWithRiderDB(match.riders[index], [res], match.dateOfGame))
         .then(() => navigate(`/speedwayMatch/${JSON.stringify(match)}`))
 
     }
@@ -220,4 +219,4 @@ const NewRiderComponent = (props) => {
     )
 }
 
-export default NewRiderComponent;
+export default NewRider;
