@@ -1,4 +1,4 @@
-export default class SpeedwayTeam{
+export default class TeamModel{
 
     controller(){}
 
@@ -48,6 +48,18 @@ export default class SpeedwayTeam{
         }catch(error){
             console.log('get team by name has failed')
         }
+    }
+
+    countResult(match){
+        let homeRiders = match.riders.filter((rider) => rider.homeAway === 'home')
+        let awayRiders = match.riders.filter((rider) => rider.homeAway === 'away')
+        let res = [{},{}]
+        res[0].result = homeRiders.reduce((sum, rider) => sum += rider.pointsCurrent, 0)
+        res[0].heats = homeRiders.reduce((sum, rider) => sum += rider.heatsCurrent, 0)
+        res[1].result = awayRiders.reduce((sum, rider) => sum += rider.pointsCurrent, 0)
+        res[1].heats = awayRiders.reduce((sum, rider) => sum += rider.heatsCurrent, 0)
+        match.teams = res
+        return match
     }
 
 }

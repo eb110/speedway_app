@@ -1,18 +1,29 @@
+import Rider from "./Rider"
 
 const Team = (props) => {
 
+    let team = props.team
     let match = props.match
-    const homeAway = props.homeAway
-    const side = homeAway === "away" ? 'GOŚCIE' : 'GOSPODARZE'
-    const heats = homeAway === "away" ? match.awayHeats : match.homeHeats
-    const result = homeAway === "away" ? match.awayResultPoints : match.homeResultPoints
-    const fullNameTag = homeAway === 'away' ? 'away' : 'home'
+    let riders = match.riders.filter((rider) => team.side === 'Gospodarze' ? 
+        rider.homeAway === 'home' : rider.homeAway === 'away')
+    let key = 0
 
     return (
         <div>
-            {side}: {result} BIEGI: {heats}
+            {team.side}: {team.result} BIEGI: {team.heats}
             <div>
-                {match[fullNameTag]}
+                {team.fullName}
+            </div>
+            <div>
+                {riders.map((rider) => (
+                    <div
+                        key={key++ + ' rider.nr'}
+                    >
+                        <Rider
+                            rider={rider}
+                        />
+                    </div>
+                ))}
             </div>
         </div>
     )

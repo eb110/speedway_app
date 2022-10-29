@@ -1,4 +1,4 @@
-export default class SpeedwayRider {
+export default class RiderModel {
 
     controller() { }
 
@@ -49,7 +49,7 @@ export default class SpeedwayRider {
         return await this.getAllBySurname(match.riders[index].surname)
             .then((res) => this.concatRiderParserWithRiderDB(match.riders[index], res, match.dateOfGame))
             .then((res) => {
-                match.riders[index] = res;
+                match.riders[index].riderDB = res;
                 return this.fetchRidersFromDB(match, index - 1)
             })
     }
@@ -64,59 +64,14 @@ export default class SpeedwayRider {
                 rider.name = 'Piotr Jr'
             }
         }
-        // else if (rider.surname.toLowerCase() === 'baliński' && rider.name === 'D') {
-        //     rider.name = 'Dariusz'
-        // }
-        // else if (rider.surname.toLowerCase() === 'liszka') {
-        //     if (checkDate < 1986) {
-        //         rider.name = 'Piotr'
-        //     }
-        //     else {
-        //         rider.name = 'Przemysław'
-        //     }
-        // }
-        // else if(rider.surname.toLowerCase() === 'kowalski'){
-        //     if(rider.name === 'S'){
-        //         if(checkDate === 1985){
-        //             riderDB = riderDB.filter((rdr) => rdr.id === 487)
-        //         }
-        //     }
-        // }
-        // else if(rider.surname.toLowerCase() === 'wiśniewski'){
-        //     if(checkDate === 1985){
-        //         if(rider.name === 'J'){
-        //             rider.name = 'Tadeusz'
-        //             riderDB = riderDB.filter((rdr) => rdr.id === 326)
-        //         }
-        //     }
-        // }
         riderDB = riderDB.find((rdr) => rdr.name.substring(0, rider.name.length) === rider.name)
         if (riderDB) {
-            let numericData = {
-                points: rider.points,
-                bonuses: rider.bonuses,
-                heats: rider.heats,
-                games: rider.games,
-                fullPerfects: rider.fullPerfects,
-                paidPerfects: rider.paidPerfects
-            }
-            for (const key in riderDB) {
-                rider[key] = riderDB[key]
-            }
-            rider.pointsCurrent = numericData.points
-            rider.bonusesCurrent = numericData.bonuses
-            rider.heatsCurrent = numericData.heats
-            rider.fullPerfectsCurrent = numericData.fullPerfects
-            rider.paidPerfectsCurrent = numericData.paidPerfects
-            rider = this.updateRiderBirthAttribs(rider, matchDate)
-            rider.edit = false
+            riderDB = this.updateRiderBirthAttribs(riderDB, matchDate)
+            riderDB.edit = false
         }
-        return rider
+        return riderDB
     }
 
-    /*
-     Card_014
-    */
     updateRiderBirthAttribs(rider, matchDate) {
         let currentDate = new Date().getFullYear()
         if (rider.ripDate) {
@@ -127,6 +82,45 @@ export default class SpeedwayRider {
         rider.age = currentDate - +rider.birthDate.substring(0, 4)
         rider.seasonAge = +matchDate.substring(matchDate.lastIndexOf('-') + 1) - +rider.birthDate.substring(0, 4)
         return rider
+    }
+
+    countRidersPoints = (match) => {
+        for (let i = 0; i < match.riders.length; i++) {
+            match.riders[i].pointsString = match.riders[i].pointsString.replaceAll(' ', '')
+            let points = match.riders[i].pointsString.split(',').filter((x) => x !== '-')
+            let bonus = 0;
+            let point = 0.0
+            let heat = 0
+            let fullPerfect = 0
+            let paidPerfect = 0
+            for (let j = 0; j < points.length; j++) {
+                let heatRecord = points[j];
+                let pointTemp = 0.0;
+                if (heatRecord.includes(".")) {
+                    pointTemp = parseFloat(heatRecord.substring(0, 3));
+                }
+                else if ('0123456789'.includes(heatRecord[0]))
+                    pointTemp = +("" + heatRecord[0])
+                if (heatRecord.includes("*"))
+                    bonus++;
+                point += pointTemp;
+                heat++;
+            }
+    
+            if (heat >= 5 && point / heat === 3) {
+                fullPerfect++;
+            }
+            else if (heat >= 5 && (point + bonus) / heat === 3) {
+                paidPerfect++;
+            }
+            match.riders[i].heatsCurrent = heat
+            match.riders[i].pointsCurrent = point
+            match.riders[i].bonusesCurrent = bonus
+            match.riders[i].fullPerfectsCurrent = fullPerfect
+            match.riders[i].paidPerfectsCurrent = paidPerfect
+            match.riders[i].perfect = (fullPerfect > 0 || paidPerfect > 0) ? true : false
+        }
+        return match
     }
 
     async postNewRider(newRider) {

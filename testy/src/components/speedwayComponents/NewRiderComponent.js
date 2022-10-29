@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {useNavigate} from 'react-router-dom'
-import SpeedwayRider from '../../modelController/SpeedwayRider';
+import RiderModel from '../../modelController/RiderModel';
 
 const NewRiderComponent = (props) => {
 
@@ -88,9 +88,9 @@ const NewRiderComponent = (props) => {
 
         match.riders[index].edit = false
 
-        await new SpeedwayRider().postNewRider(speedway_rider)
-        .then(() => new SpeedwayRider().getTheLastRider())
-        .then((res) => match.riders[index] = new SpeedwayRider().concatRiderParserWithRiderDB(match.riders[index], [res], match.dateOfGame))
+        await new RiderModel().postNewRider(speedway_rider)
+        .then(() => new RiderModel().getTheLastRider())
+        .then((res) => match.riders[index] = new RiderModel().concatRiderParserWithRiderDB(match.riders[index], [res], match.dateOfGame))
         .then(() => navigate(`/speedwayMatch/${JSON.stringify(match)}`))
 
     }

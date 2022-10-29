@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom'
 import RidersComponent from './RidersComponent';
-import SpeedwayRider from '../../modelController/SpeedwayRider';
+import RiderModel from '../../modelController/RiderModel';
 import InsertedMatch from '../../modelController/InsertedMatch';
-import Team from './Team';
+import Teams from './Teams';
 import SpeedwayMatchRider from '../../modelController/SpeedwayMatchRider';
 import SpeedwayMatch from '../../modelController/SpeedwayMatch';
 import SeasonGames from '../../modelController/SeasonGames';
 import Validator from '../validators/Validator';
+import TeamModel from '../../modelController/TeamModel';
 
 const Speedway = () => {
 
@@ -20,9 +21,11 @@ const Speedway = () => {
 
   useEffect(() => {
     const updateRiders = async () => {
-      await new SpeedwayRider().fetchRidersFromDB(match, match.riders.length - 1)
+      await new RiderModel().fetchRidersFromDB(match, match.riders.length - 1)
+        .then((res) => new RiderModel().countRidersPoints(res))
+        .then((res) => new TeamModel().countResult(res))
         .then((res) => setMatch(Object.assign({}, res)))
-        .then(() => countRidersPoints())
+        .then(() => setValidator(true))
     }
 
     if (match.fetchRidersFromDB === true) {
@@ -33,84 +36,6 @@ const Speedway = () => {
       setValidator(true)
     }
   }, [])
-
-  const countResult = () => {
-    let tempmatch = match
-    tempmatch.awayResultPoints = 0
-    tempmatch.homeResultPoints = 0
-    tempmatch.awayHeats = 0
-    tempmatch.homeHeats = 0
-    tempmatch.bonuses = 0
-    tempmatch.heats = 0
-    tempmatch.games = 0
-    tempmatch.paidPerfects = 0
-    tempmatch.fullPerfects = 0
-    tempmatch.points = 0
-    for(let i = 0; i < tempmatch.riders.length; i++){
-        let rd = tempmatch.riders[i]
-        if(rd.homeAway === 'away'){
-          tempmatch.awayResultPoints += rd.pointsCurrent
-          tempmatch.awayHeats += rd.heatsCurrent
-        }else{
-          tempmatch.homeResultPoints += rd.pointsCurrent
-          tempmatch.homeHeats += rd.heatsCurrent
-        }
-        tempmatch.bonuses += rd.bonusesCurrent
-        tempmatch.heats += rd.heatsCurrent
-        tempmatch.games++
-        tempmatch.paidPerfects += rd.paidPerfectsCurrent
-        tempmatch.fullPerfects += rd.fullPerfectsCurrent
-        tempmatch.points += rd.pointsCurrent
-    }
-    setMatch(Object.assign({}, tempmatch))
-    setValidator(true)
-    console.log(match)
-}
-
-const countRidersPoints = () => {
-    for (let i = 0; i < match.riders.length; i++) {
-        match.riders[i].pointsString = match.riders[i].pointsString.replaceAll(' ', '')
-        let points = match.riders[i].pointsString.split(',').filter((x) => x !== '-')
-        let bonus = 0;
-        let point = 0.0
-        let heat = 0
-        let fullPerfect = 0
-        let paidPerfect = 0
-        for (let j = 0; j < points.length; j++) {
-            let heatRecord = points[j];
-            let pointTemp = 0.0;
-            if (heatRecord.includes(".")) {
-                pointTemp = parseFloat(heatRecord.substring(0, 3));
-            }
-            else if ('0123456789'.includes(heatRecord[0]))
-                pointTemp = +("" + heatRecord[0])
-            if (heatRecord.includes("*"))
-                bonus++;
-            point += pointTemp;
-            heat++;
-        }
-
-        if (heat >= 5 && point / heat === 3) {
-            fullPerfect++;
-        }
-        else if (heat >= 5 && (point + bonus) / heat === 3) {
-            paidPerfect++;
-        }
-        match.riders[i].heatsCurrent = heat
-        match.riders[i].heats += heat
-        match.riders[i].pointsCurrent = point
-        match.riders[i].points += point
-        match.riders[i].bonusesCurrent = bonus
-        match.riders[i].bonuses += bonus
-        match.riders[i].fullPerfectsCurrent = fullPerfect
-        match.riders[i].fullPerfects += fullPerfect
-        match.riders[i].paidPerfectsCurrent = paidPerfect
-        match.riders[i].paidPerfects += paidPerfect
-        match.riders[i].games++
-        match.riders[i].perfect = (fullPerfect > 0 || paidPerfect > 0) ? true : false
-    }
-    countResult()
-}
 
   const newRider = (riderNumber) => {
     for (let i = 0; i < match.riders.length; i++) {
@@ -131,7 +56,7 @@ const countRidersPoints = () => {
         .then(() => new SpeedwayMatch().getLastMatch())
         .then((res) => { match.match = res; return })
         .then(() => new SpeedwayMatchRider().postMatchRiders(match, match.riders.length - 1))
-        .then(() => new SpeedwayRider().updateRiders(match, match.riders.length - 1))
+        .then(() => new RiderModel().updateRiders(match, match.riders.length - 1))
         .then(() => { new InsertedMatch().insertMatch(match.seasonGame.link); setMessage({ state: true, msg: 'The match has been uploaded' }) })
         .then(() => { match.seasonGame.inserted = true; new SeasonGames().updateSeasonGame(match.seasonGame) })
     } catch (error) {
@@ -156,23 +81,8 @@ const countRidersPoints = () => {
       </div>
       {validator &&
         <div>
-          <Team
+          <Teams
             match={match}
-            homeAway={'away'}
-          />
-          <RidersComponent
-            match={match}
-            homeAway='away'
-            createNewRider={newRider}
-          />
-          <Team
-            match={match}
-            homeAway={'home'}
-          />
-          <RidersComponent
-            match={match}
-            homeAway='home'
-            createNewRider={newRider}
           />
           <Validator
             match={match}

@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'
 import SeasonGames from '../../modelController/SeasonGames';
 import SeasonModel from '../../modelController/SeasonModel';
-import SpeedwayTeam from "../../modelController/SpeedwayTeam"
 import SeasonGame from './SeasonGame';
+import TeamModel from '../../modelController/TeamModel'
 
 const LeagueComponent = (props) => {
     const rok = props.leagueDetails.year
@@ -30,7 +30,7 @@ const LeagueComponent = (props) => {
     }
 
     const fetchTeams = async () => {
-        await new SpeedwayTeam().getAllTeams()
+        await new TeamModel().getAllTeams()
             .then((res) => { setTeams(res) })
             .then((res) => { setDisplaySeason(false); setPickTeams(true); })
     }
@@ -77,7 +77,7 @@ const LeagueComponent = (props) => {
             tempTeams.push(teams[i])
         tempTeams.push(addTeam)
         setTeams(tempTeams)
-        await new SpeedwayTeam().postNewTeam(addTeam)
+        await new TeamModel().postNewTeam(addTeam)
     }
 
     const confirmSeason = (event) => {
