@@ -44,7 +44,7 @@ const Speedway = () => {
     try {
       await new SpeedwayMatch().insertMatch(datkaWsad, match.round, match.seasonGame.level)
         .then(() => new SpeedwayMatch().getLastMatch())
-        .then((res) => { match.match = res; return })
+        .then((res) => { console.log('1'); match.match = res; return })
         .then(() => new SpeedwayMatchRider().postMatchRiders(match, match.riders.length - 1))
         .then(() => new RiderModel().updateRiders(match, match.riders.length - 1))
         .then(() => { match.seasonGame.inserted = true; new SeasonGames().updateSeasonGame(match.seasonGame) })
@@ -53,7 +53,7 @@ const Speedway = () => {
     } catch (error) {
       match.seasonGame.inserted = false
       console.log('confirm of the match results failed')
-      setMessage({ state: true, msg: 'ERROR' })
+      setMessage({ state: true, msg: error })
     }
   }
 

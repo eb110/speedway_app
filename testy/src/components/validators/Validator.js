@@ -19,7 +19,6 @@ const Validator = (props) => {
     }
 
     const resultDoubleConfirmation = () => {
-        console.log(validatorsCounter)
         if(validatorsCounter === 1)
             setConfirm(true)
     }

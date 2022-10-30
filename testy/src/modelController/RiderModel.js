@@ -30,7 +30,6 @@ export default class RiderModel {
 
     getTheLastRider = async () => {
         try {
-            console.log('getTheLastRider db read')
             return await fetch(`http://localhost:8080/rider/getLastRider`)
                 .then((res) => res.json())
         } catch (err) {
@@ -170,7 +169,7 @@ export default class RiderModel {
         match.total.paidPerfect = 0
         match.total.fullPerfect = 0
         match.total.game = 0
-        for(let i = 0; i < match.riders.length; i++){
+        for (let i = 0; i < match.riders.length; i++) {
             match.riders[i].riderDB.bonuses += match.riders[i].bonusesCurrent;
             match.riders[i].riderDB.games++
             match.riders[i].riderDB.heats += match.riders[i].heatsCurrent;
