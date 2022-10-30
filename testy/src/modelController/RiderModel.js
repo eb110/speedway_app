@@ -106,7 +106,7 @@ export default class RiderModel {
                 point += pointTemp;
                 heat++;
             }
-    
+
             if (heat >= 5 && point / heat === 3) {
                 fullPerfect++;
             }
