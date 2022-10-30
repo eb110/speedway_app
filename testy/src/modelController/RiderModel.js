@@ -140,7 +140,7 @@ export default class RiderModel {
     async updateRiders(match, index) {
         if (index < 0)
             return
-        return await this.updateRider(match.riders[index])
+        return await this.updateRider(match.riders[index].riderDB)
             .then(() => this.updateRiders(match, index - 1))
     }
 

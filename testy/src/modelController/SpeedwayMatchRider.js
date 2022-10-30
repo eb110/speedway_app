@@ -19,7 +19,7 @@ export default class SpeedwayMatchRider{
         if(index < 0)
             return
         let team = match.riders[index].homeAway === 'away' ? match.teams[1] : match.teams[0]
-        return await this.insertRiderMatch(match.riders[index].riderDB, team, match.match)
+        return await this.insertRiderMatch(match.riders[index], team, match.match)
         .then(() => this.postMatchRiders(match, index - 1))
     }
 
@@ -31,7 +31,7 @@ export default class SpeedwayMatchRider{
                 pkt: rider.pointsString,
                 created: datka,
                 lastUpdated: datka,
-                speedwayRider: rider,
+                speedwayRider: rider.riderDB,
                 speedwayTeam: team,
                 speedwayMatch: match
             }

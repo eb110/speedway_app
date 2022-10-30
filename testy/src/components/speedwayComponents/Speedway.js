@@ -44,11 +44,11 @@ const Speedway = () => {
     try {
       await new SpeedwayMatch().insertMatch(datkaWsad, match.round, match.seasonGame.level)
         .then(() => new SpeedwayMatch().getLastMatch())
-        .then((res) => { console.log('1'); match.match = res; return })
+        .then((res) => { match.match = res; return })
         .then(() => new SpeedwayMatchRider().postMatchRiders(match, match.riders.length - 1))
         .then(() => new RiderModel().updateRiders(match, match.riders.length - 1))
         .then(() => { match.seasonGame.inserted = true; new SeasonGames().updateSeasonGame(match.seasonGame) })
-        .then(() => new TotalResultModel().updateTotalResult())
+        .then(() => new TotalResultModel().updateTotalResult(match))
         .then(() => setMessage({ state: true, msg: 'ALL WENT OK' }))
     } catch (error) {
       match.seasonGame.inserted = false
