@@ -7,6 +7,7 @@ import SpeedwayMatch from '../../modelController/SpeedwayMatch';
 import SeasonGames from '../../modelController/SeasonGames';
 import Validator from '../validators/Validator';
 import TeamModel from '../../modelController/TeamModel';
+import TotalResultModel from '../../modelController/TotalResultModel';
 
 const Speedway = () => {
 
@@ -16,8 +17,6 @@ const Speedway = () => {
   const [validator, setValidator] = useState(false);
 
   match.seasonGame.link = match.seasonGame.link.replaceAll('*', '/')
-
-  console.log(match)
 
   useEffect(() => {
     const updateRiders = async () => {
@@ -40,7 +39,7 @@ const Speedway = () => {
   const confirmMatch = async () => {
     let datka = match.dateOfGame.split('-')
     let datkaWsad = datka[2] + '-' + (datka[1].length === 1 ? '0' + datka[1] : datka[1]) + '-' + (datka[0].length === 1 ? '0' + datka[0] : datka[0]);
-    new RiderModel().updateRidersResultForDbUpdate()
+    new RiderModel().updateRidersResultForDbUpdate(match)
 
     try {
       await new SpeedwayMatch().insertMatch(datkaWsad, match.round, match.seasonGame.level)
@@ -49,6 +48,8 @@ const Speedway = () => {
         .then(() => new SpeedwayMatchRider().postMatchRiders(match, match.riders.length - 1))
         .then(() => new RiderModel().updateRiders(match, match.riders.length - 1))
         .then(() => { match.seasonGame.inserted = true; new SeasonGames().updateSeasonGame(match.seasonGame) })
+        .then(() => new TotalResultModel().updateTotalResult(match.total))
+        .then(() => setMessage({state:true, msg:'ALL WENT OK'}))
     } catch (error) {
       match.seasonGame.inserted = false
       console.log('confirm of the match results failed')

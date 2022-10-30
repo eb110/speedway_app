@@ -21,7 +21,9 @@ export default class TotalResultModel {
 
     updateTotalResult = async (tr) => {
         let datka = Date.now();
+        tr.id = 1
         tr.lastUpdated = datka
+        tr.created = '2022-10-30T10:22:10.805Z'
         try {
             await fetch(`http://localhost:8080/totalResult/updateTotalResult`, {
                 method: 'PUT',
@@ -29,7 +31,7 @@ export default class TotalResultModel {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(rdr)
+                body: JSON.stringify(tr)
             });
         } catch (error) {
             console.log('update of total result has failed')
