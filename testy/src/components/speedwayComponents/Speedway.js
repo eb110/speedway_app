@@ -17,6 +17,8 @@ const Speedway = () => {
 
   match.seasonGame.link = match.seasonGame.link.replaceAll('*', '/')
 
+  console.log(match)
+
   useEffect(() => {
     const updateRiders = async () => {
       await new RiderModel().fetchRidersFromDB(match, match.riders.length - 1)
@@ -38,6 +40,8 @@ const Speedway = () => {
   const confirmMatch = async () => {
     let datka = match.dateOfGame.split('-')
     let datkaWsad = datka[2] + '-' + (datka[1].length === 1 ? '0' + datka[1] : datka[1]) + '-' + (datka[0].length === 1 ? '0' + datka[0] : datka[0]);
+    new RiderModel().updateRidersResultForDbUpdate()
+
     try {
       await new SpeedwayMatch().insertMatch(datkaWsad, match.round, match.seasonGame.level)
         .then(() => new SpeedwayMatch().getLastMatch())
