@@ -48,11 +48,12 @@ const Speedway = () => {
         .then(() => new SpeedwayMatchRider().postMatchRiders(match, match.riders.length - 1))
         .then(() => new RiderModel().updateRiders(match, match.riders.length - 1))
         .then(() => { match.seasonGame.inserted = true; new SeasonGames().updateSeasonGame(match.seasonGame) })
-        .then(() => new TotalResultModel().updateTotalResult(match.total))
-        .then(() => setMessage({state:true, msg:'ALL WENT OK'}))
+        .then(() => new TotalResultModel().updateTotalResult())
+        .then(() => setMessage({ state: true, msg: 'ALL WENT OK' }))
     } catch (error) {
       match.seasonGame.inserted = false
       console.log('confirm of the match results failed')
+      setMessage({ state: true, msg: 'ERROR' })
     }
   }
 

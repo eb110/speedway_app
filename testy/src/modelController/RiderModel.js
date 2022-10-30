@@ -184,6 +184,5 @@ export default class RiderModel {
             match.total.paidPerfect += match.riders[i].riderDB.paidPerfects
             match.total.fullPerfect += match.riders[i].riderDB.fullPerfects
         }
-        console.log(match.total)
     }
 }
