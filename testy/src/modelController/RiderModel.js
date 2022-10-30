@@ -161,4 +161,28 @@ export default class RiderModel {
             console.log('update rider failed')
         }
     }
+
+    updateRidersResultForDbUpdate = (match) => {
+        match.total = {}
+        match.total.points = 0.0
+        match.total.heats = 0
+        match.total.bonuses = 0
+        match.total.paidPerfects = 0
+        match.total.fullPerfects = 0
+        match.total.games = 0
+        for(let i = 0; i < match.riders.lengt; i++){
+            match.riders[i].riderDB.bonuses += match.riders[i].bonusesCurrent;
+            match.riders[i].riderDB.games++
+            match.riders[i].riderDB.heats += match.riders[i].heatsCurrent;
+            match.riders[i].riderDB.points += match.riders[i].pointsCurrent;
+            match.riders[i].riderDB.paidPerfects += match.riders[i].paidPerfectsCurrent;
+            match.riders[i].riderDB.fullPerfects += match.riders[i].fullPerfectsCurrent;
+            match.total.points += match.riders[i].riderDB.points
+            match.total.heats += match.riders[i].riderDB.heats
+            match.total.games += match.riders[i].riderDB.games
+            match.total.bonuses += match.riders[i].riderDB.bonuses
+            match.total.paidPerfects += match.riders[i].riderDB.paidPerfects
+            match.total.fullPerfects += match.riders[i].riderDB.fullPerfects
+        }
+    }
 }

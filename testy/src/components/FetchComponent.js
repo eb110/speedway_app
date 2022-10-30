@@ -3,7 +3,6 @@ import axios from 'axios';
 import EncoderLatin from '../middleware/EncoderLatin';
 import ParserLach from "../middleware/ParserLach";
 import { useNavigate } from 'react-router-dom';
-import InsertedMatch from '../modelController/InsertedMatch';
 
 const FetchComponent = (props) => {
 
@@ -56,9 +55,7 @@ const FetchComponent = (props) => {
     }
 
     const handleButtonClick = async () => {
-        let im = new InsertedMatch()
-        let name = im.rlachLinkToName(inputValue)
-        await im.checkIfExist(name).then((res) => res ? setMessage({ state: true, msg: 'This match has been already inserted' }) : setAxiosUrl(inputValue))
+        await setAxiosUrl(inputValue)
     }
 
     const backHome = (event) => {
