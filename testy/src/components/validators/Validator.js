@@ -8,6 +8,7 @@ import RiderDbExistenceValidator from "./RiderDbExistenceValidator";
 const Validator = (props) => {
 
     let match = props.match
+    let confirmButton = props.confirmButton
     let confirmMatch = props.confirmMatch
     const [confirm, setConfirm] = useState(true)
     const [validatorsCounter, setValidatorCounter] = useState(0)
@@ -19,7 +20,7 @@ const Validator = (props) => {
     }
 
     const resultDoubleConfirmation = () => {
-        if(validatorsCounter === 1)
+        if (validatorsCounter === 1)
             setConfirm(true)
     }
 
@@ -47,16 +48,19 @@ const Validator = (props) => {
                 validateGame={validateGame}
             />
             <RiderDbExistenceValidator
-                   match={match}
-                   validateGame={validateGame}
+                match={match}
+                validateGame={validateGame}
             />
-            {confirm &&
+            {confirmButton &&
                 <div>
-                    <button
-                        onClick={confirmGame}
-                    >Confirm</button>
-                </div>
-            }
+                    {confirm &&
+                        <div>
+                            <button
+                                onClick={confirmGame}
+                            >Confirm</button>
+                        </div>
+                    }
+                </div>}
         </div>
 
     )

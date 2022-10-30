@@ -15,6 +15,7 @@ const Speedway = () => {
   const [match, setMatch] = useState(JSON.parse(useParams().matchDetails))
   const [message, setMessage] = useState({ state: false, msg: '' })
   const [validator, setValidator] = useState(false);
+  const [confirmButton, setConfirmButton] = useState(true);
 
   match.seasonGame.link = match.seasonGame.link.replaceAll('*', '/')
 
@@ -50,6 +51,7 @@ const Speedway = () => {
         .then(() => { match.seasonGame.inserted = true; new SeasonGames().updateSeasonGame(match.seasonGame) })
         .then(() => new TotalResultModel().updateTotalResult(match))
         .then(() => setMessage({ state: true, msg: 'ALL WENT OK' }))
+        .then(() => setConfirmButton(false))
     } catch (error) {
       match.seasonGame.inserted = false
       console.log('confirm of the match results failed')
@@ -78,6 +80,7 @@ const Speedway = () => {
           <Validator
             match={match}
             confirmMatch={confirmMatch}
+            confirmButton={confirmButton}
           /></div>}
       <div>
         {message.state &&
