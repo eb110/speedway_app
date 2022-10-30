@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom'
 import RiderModel from '../../modelController/RiderModel';
-import InsertedMatch from '../../modelController/InsertedMatch';
 import Teams from './Teams';
 import SpeedwayMatchRider from '../../modelController/SpeedwayMatchRider';
 import SpeedwayMatch from '../../modelController/SpeedwayMatch';
@@ -45,7 +44,6 @@ const Speedway = () => {
         .then((res) => { match.match = res; return })
         .then(() => new SpeedwayMatchRider().postMatchRiders(match, match.riders.length - 1))
         .then(() => new RiderModel().updateRiders(match, match.riders.length - 1))
-        .then(() => { new InsertedMatch().insertMatch(match.seasonGame.link); setMessage({ state: true, msg: 'The match has been uploaded' }) })
         .then(() => { match.seasonGame.inserted = true; new SeasonGames().updateSeasonGame(match.seasonGame) })
     } catch (error) {
       match.seasonGame.inserted = false
