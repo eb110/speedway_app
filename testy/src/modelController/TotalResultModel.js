@@ -4,7 +4,7 @@ export default class TotalResultModel {
 
     getTotalResultById = async (id) => {
         try {
-            return await fetch(`http://localhost:8080/totalResult/getTotalResult/${id}`)
+            return await fetch(`http://localhost:8080/totalResult/getById/${id}`)
                 .then((res) => {
                     if (res.status === 200) {
                         return res.json()
@@ -36,11 +36,23 @@ export default class TotalResultModel {
         }
     }
 
+    addResultToTotalResult = async (tr) => {
+        await this.getAllRidersTotals()
+        .then((res) => {
+            res.game += tr.game
+            res.point += tr.point
+            res.bonus += tr.bonus
+            res.heat += tr.heat
+            res.fullPerfect += tr.fullPerfect
+            res.paidPerfect += tr.paidPerfect
+            return res
+        })
+        .then((res) => this.updateTotalResult(res))
+    }
+
     updateTotalResult = async (tr) => {
         let datka = Date.now();
-        tr.id = 1
         tr.lastUpdated = datka
-        tr.created = '2022-10-30T10:22:10.805Z'
         try {
             await fetch(`http://localhost:8080/totalResult/updateTotalResult`, {
                 method: 'PUT',

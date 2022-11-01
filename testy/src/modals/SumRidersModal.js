@@ -24,11 +24,14 @@ const OVERLAY_STYLES = {
 export default function SumRidersModal({ open, someText, onClose }) {
 
   const [totals, setTotals] = useState(false)
+  const [totalSum, setTotalSum] = useState(false)
 
   const fetchRidersTotals = async () => {
     if (open) {
       await new TotalResultModel().getAllRidersTotals()
-        .then((res) => { console.log(res); setTotals(res) })
+        .then((res) => { console.log(res); setTotals(res); })
+        .then(() => new TotalResultModel().getTotalResultById(1))
+        .then((res) => {console.log(res); setTotalSum(res);})
     }
   }
 
@@ -44,22 +47,22 @@ export default function SumRidersModal({ open, someText, onClose }) {
       <div style={OVERLAY_STYLES}></div>
       <div style={MODAL_STYLES}>
         <div>
-        Points: {totals.points}
+        Points: {totals.points} Points: {totalSum.point}
         </div>
         <div>
-        Heats: {totals.heats}
+        Heats: {totals.heats} Heats: {totalSum.heat}
         </div>
         <div>
-        Bonuses: {totals.bonuses}
+        Bonuses: {totals.bonuses} Bonuses: {totalSum.bonus}
         </div>
         <div>
-        Games: {totals.games}
+        Games: {totals.games} Games: {totalSum.game}
         </div>
         <div>
-        Full Perfects: {totals.fullPerfects}
+        Full Perfects: {totals.fullPerfects} Full Perfects: {totalSum.fullPerfect}
         </div>
         <div>
-        Paid Perfects: {totals.paidPerfects}
+        Paid Perfects: {totals.paidPerfects} Paid Perfects: {totalSum.paidPerfect}
         </div>
   
         

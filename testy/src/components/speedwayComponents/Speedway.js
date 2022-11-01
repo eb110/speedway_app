@@ -51,7 +51,7 @@ const Speedway = () => {
         .then(() => new SpeedwayMatchRider().postMatchRiders(match, match.riders.length - 1))
         .then(() => new RiderModel().updateRiders(match, match.riders.length - 1))
         .then(() => { match.seasonGame.inserted = true; new SeasonGames().updateSeasonGame(match.seasonGame) })
-        .then(() => new TotalResultModel().updateTotalResult(match.total))
+        .then(() => new TotalResultModel().addResultToTotalResult(match.total))
         .then(() => setMessage({ state: true, msg: 'ALL WENT OK' }))
         .then(() => setConfirmButton(false))
     } catch (error) {
