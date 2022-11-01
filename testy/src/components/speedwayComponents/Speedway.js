@@ -8,6 +8,7 @@ import SeasonGames from '../../modelController/SeasonGames';
 import Validator from '../validators/Validator';
 import TeamModel from '../../modelController/TeamModel';
 import TotalResultModel from '../../modelController/TotalResultModel';
+import SumRidersModal from '../../modals/SumRidersModal.js';
 
 const Speedway = () => {
 
@@ -16,6 +17,7 @@ const Speedway = () => {
   const [message, setMessage] = useState({ state: false, msg: '' })
   const [validator, setValidator] = useState(false);
   const [confirmButton, setConfirmButton] = useState(true);
+  const [showTotals, setShowTotals] = useState(false)
 
   match.seasonGame.link = match.seasonGame.link.replaceAll('*', '/')
 
@@ -49,7 +51,7 @@ const Speedway = () => {
         .then(() => new SpeedwayMatchRider().postMatchRiders(match, match.riders.length - 1))
         .then(() => new RiderModel().updateRiders(match, match.riders.length - 1))
         .then(() => { match.seasonGame.inserted = true; new SeasonGames().updateSeasonGame(match.seasonGame) })
-        .then(() => new TotalResultModel().updateTotalResult(match))
+        .then(() => new TotalResultModel().updateTotalResult(match.total))
         .then(() => setMessage({ state: true, msg: 'ALL WENT OK' }))
         .then(() => setConfirmButton(false))
     } catch (error) {
@@ -65,6 +67,10 @@ const Speedway = () => {
 
   const backHome = (event) => {
     navigate(`/`)
+  }
+
+  const calculateTotal = () => {
+    console.log('totals')
   }
 
   return (
@@ -87,7 +93,10 @@ const Speedway = () => {
           message.msg
         }
       </div>
-      <div>
+      <div
+        style={{
+          paddingTop: '05px'
+        }}>
         <button
           onClick={goToTheLeagueComponent}
         >Back</button>
@@ -95,6 +104,17 @@ const Speedway = () => {
           name='backToHome'
           onClick={event => backHome(event)}
         >Home</button>
+      </div>
+      <div>
+        <button
+          onClick={() => setShowTotals(true)}
+        >Totals</button>
+        <SumRidersModal
+          open={showTotals}
+          onClose={() => setShowTotals(false)}
+        >
+          Jestem modalem
+        </SumRidersModal>
       </div>
     </div>
   );

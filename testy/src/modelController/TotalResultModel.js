@@ -19,6 +19,23 @@ export default class TotalResultModel {
         }
     }
 
+    getAllRidersTotals = async () => {
+        try {
+            return await fetch(`http://localhost:8080/totalResult/getTotalOfAllRiders`)
+                .then((res) => {
+                    if (res.status === 200) {
+                        return res.json()
+                    }
+                    else {
+                        console.log('could not fetch the riders total result')
+                        return null
+                    }
+                })
+        } catch (err) {
+            console.log('get total result of riders failed')
+        }
+    }
+
     updateTotalResult = async (tr) => {
         let datka = Date.now();
         tr.id = 1
