@@ -168,20 +168,21 @@ export default class RiderModel {
         match.total.bonus = 0
         match.total.paidPerfect = 0
         match.total.fullPerfect = 0
-        match.total.game = 0
-        for (let i = 0; i < match.riders.length; i++) {
+        const l = match.riders.length
+        match.total.game = l
+   
+        for (let i = 0; i < l; i++) {
             match.riders[i].riderDB.bonuses += match.riders[i].bonusesCurrent;
             match.riders[i].riderDB.games++
             match.riders[i].riderDB.heats += match.riders[i].heatsCurrent;
             match.riders[i].riderDB.points += match.riders[i].pointsCurrent;
             match.riders[i].riderDB.paidPerfects += match.riders[i].paidPerfectsCurrent;
             match.riders[i].riderDB.fullPerfects += match.riders[i].fullPerfectsCurrent;
-            match.total.point += match.riders[i].riderDB.points
-            match.total.heat += match.riders[i].riderDB.heats
-            match.total.game += match.riders[i].riderDB.games
-            match.total.bonus += match.riders[i].riderDB.bonuses
-            match.total.paidPerfect += match.riders[i].riderDB.paidPerfects
-            match.total.fullPerfect += match.riders[i].riderDB.fullPerfects
+            match.total.point += match.riders[i].pointsCurrent;
+            match.total.heat += match.riders[i].heatsCurrent;
+            match.total.bonus += match.riders[i].bonusesCurrent;
+            match.total.paidPerfect += match.riders[i].paidPerfectsCurrent;
+            match.total.fullPerfect += match.riders[i].fullPerfectsCurrent;
         }
     }
 }

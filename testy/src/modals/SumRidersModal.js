@@ -29,9 +29,9 @@ export default function SumRidersModal({ open, someText, onClose }) {
   const fetchRidersTotals = async () => {
     if (open) {
       await new TotalResultModel().getAllRidersTotals()
-        .then((res) => { console.log(res); setTotals(res); })
+        .then((res) => setTotals(res))
         .then(() => new TotalResultModel().getTotalResultById(1))
-        .then((res) => {console.log(res); setTotalSum(res);})
+        .then((res) => setTotalSum(res))
     }
   }
 

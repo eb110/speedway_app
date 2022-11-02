@@ -37,7 +37,7 @@ export default class TotalResultModel {
     }
 
     addResultToTotalResult = async (tr) => {
-        await this.getAllRidersTotals()
+        await this.getTotalResultById(1)
         .then((res) => {
             res.game += tr.game
             res.point += tr.point

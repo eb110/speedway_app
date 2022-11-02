@@ -95,10 +95,13 @@ const Speedway = () => {
       </div>
       <div
         style={{
-          paddingTop: '05px'
+          paddingTop: '5px',
         }}>
         <button
           onClick={goToTheLeagueComponent}
+          style={{
+            margin: '5px'
+          }}
         >Back</button>
         <button
           name='backToHome'
