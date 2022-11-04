@@ -63,6 +63,7 @@ export default class RiderModel {
                 rider.name = 'Piotr Jr'
             }
         }
+
         riderDB = riderDB.find((rdr) => rdr.name.substring(0, rider.name.length) === rider.name)
         if (riderDB) {
             riderDB = this.updateRiderBirthAttribs(riderDB, matchDate)

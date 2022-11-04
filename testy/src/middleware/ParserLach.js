@@ -56,8 +56,11 @@ class ParserLach {
         }
         else {
             base = this.data.substring(this.data.indexOf('<br>\n    ') + 9, this.data.indexOf('<br><br>'))
+          //  base = this.data.substring(this.data.indexOf('<br>\n    ') + 9, this.data.indexOf('Sędzia'))
         }
         base = base.replaceAll('(G)', '')
+        base = base.replaceAll('jr', '')
+        base = base.replaceAll('jr.', '')
         base = base.replaceAll('\r', '')
         base = base.split('<br>\n    ').filter(x => x.includes('('))
         base = base.filter((riderData) => !riderData.includes('brak zawodnika'))
@@ -68,11 +71,16 @@ class ParserLach {
             wsad = wsad.substring(wsad.indexOf(' ') + 1)
             rider.name = wsad.substring(0, wsad.indexOf('.'))
             rider.surname = wsad.substring(wsad.indexOf('.') + 1)
-            if (wsad.indexOf('jr') !== -1)
-                rider.surname = rider.surname.substring(0, rider.surname.indexOf('jr.') + 3)
-            else {
-                rider.surname = rider.surname.substring(0, rider.surname.indexOf(' '))
+            rider.surname = rider.surname.substring(0, rider.surname.indexOf(' '))
+            if(rider.surname === 'H.JÖRGENSEN'){
+                rider.name = 'L'
+                rider.surname = 'Jörgensen'
             }
+            // if (wsad.indexOf('jr') !== -1)
+            //     rider.surname = rider.surname.substring(0, rider.surname.indexOf('jr.') + 3)
+            // else {
+            //     rider.surname = rider.surname.substring(0, rider.surname.indexOf(' '))
+            // }
             rider.pointsString = wsad.substring(wsad.indexOf('(') + 1, wsad.indexOf(')'))
             rider.pointsString = rider.pointsString.replaceAll('/', 'z')
             rider.pointsString = rider.pointsString.replaceAll('?', 'X')
@@ -81,7 +89,6 @@ class ParserLach {
             }else{
                 rider.homeAway = 'home'
             }
-
             this.riders.push(rider)
         }
     }

@@ -12,6 +12,7 @@ const Rider = (props) => {
     if(matchRider.riderDB){
         matchRider.riderDB.nr = matchRider.nr
         rider = matchRider.riderDB
+        console.log(rider.countryOfBirth)
     }else{
         rider = matchRider
     }
