@@ -45,7 +45,7 @@ const SeasonGame = (props) => {
                         >Confirm Season Game</button>
                     </div>
                     {walkoverButtonsConfirmation &&
-                        <div>
+                        <div>Blamed:&nbsp;
                             <button
                                 name='wlakoverMatchHome'
                                 onClick={event => walkoverConfirmation('home')}

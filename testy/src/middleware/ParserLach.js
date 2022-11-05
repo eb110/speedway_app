@@ -76,6 +76,15 @@ class ParserLach {
                 rider.name = 'L'
                 rider.surname = 'Jörgensen'
             }
+            else if(rider.surname === 'H.NIELSEN'){
+                rider.name = 'J'
+                rider.surname = 'Nielsen'
+            }
+            else if(rider.surname === 'KARLSSON' && rider.name === 'M'){
+                let datka = this.dateOfGame.substring(this.dateOfGame.lastIndexOf('-') + 1)
+                if(datka < 2008)
+                    rider.surname = 'Max'
+            }
             // if (wsad.indexOf('jr') !== -1)
             //     rider.surname = rider.surname.substring(0, rider.surname.indexOf('jr.') + 3)
             // else {
