@@ -49,6 +49,7 @@ class ParserLach {
     }
 
     teamParser(flag) {
+    //    console.log(this.data)
         let base = ""
         if (flag === 1) {
             base = this.data.substring(0, this.data.indexOf('\n     '))
@@ -56,7 +57,8 @@ class ParserLach {
         }
         else {
             base = this.data.substring(this.data.indexOf('<br>\n    ') + 9, this.data.indexOf('<br><br>'))
-          //  base = this.data.substring(this.data.indexOf('<br>\n    ') + 9, this.data.indexOf('Sędzia'))
+       //     base = this.data.substring(this.data.indexOf('<br>\n    ') + 9, this.data.indexOf('Sędzia'))
+           //          base = this.data.substring(this.data.indexOf('<br>\n    ') + 9, this.data.indexOf('</tt>'))
         }
         base = base.replaceAll('(G)', '')
         base = base.replaceAll('jr', '')
@@ -84,6 +86,18 @@ class ParserLach {
                 let datka = this.dateOfGame.substring(this.dateOfGame.lastIndexOf('-') + 1)
                 if(datka < 2008)
                     rider.surname = 'Max'
+            }
+            else if(rider.surname === 'B.JENSEN'){
+                rider.name = 'J'
+                rider.surname = 'Monberg'
+            }
+            else if(rider.surname === 'K.IVERSEN'){
+                rider.name = 'N'
+                rider.surname = 'Iversen'
+            }
+            else if(rider.surname === 'N.ANDERSEN'){
+                rider.name = 'H'
+                rider.surname = 'Andersen'
             }
             // if (wsad.indexOf('jr') !== -1)
             //     rider.surname = rider.surname.substring(0, rider.surname.indexOf('jr.') + 3)

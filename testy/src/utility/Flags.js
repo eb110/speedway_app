@@ -17,11 +17,12 @@ import Bułgaria from '../public/img/flags/Bułgaria.svg';
 import Ameryka from '../public/img/flags/Ameryka.svg';
 import Nowa_Zelandia from '../public/img/flags/Nowa Zelandia.svg';
 import Finlandia from '../public/img/flags/Finlandia.svg';
+import Chorwacja from '../public/img/flags/Chorwacja.svg';
 
 class Flags {
     constructor(){
         this.flag = {'Polska': Polska, 'Szwecja': Szwecja, 'Anglia': Anglia, 'Norwegia': Norwegia, 'Australia': Australia, 'Łotwa': Łotwa, 
-        'Niemcy': Niemcy, 'Rosja': Rosja, 'Dania': Dania, 'Ukraina': Ukraina, 'Czechy': Czechy, 'Węgry': Węgry, 'Słowacja': Słowacja, 
+        'Niemcy': Niemcy, 'Rosja': Rosja, 'Dania': Dania, 'Ukraina': Ukraina, 'Czechy': Czechy, 'Węgry': Węgry, 'Słowacja': Słowacja, 'Chorwacja': Chorwacja, 
         'Słowenia': Słowenia, 'Francja': Francja, 'Bułgaria': Bułgaria, 'USA': Ameryka, 'Nowa Zelandia': Nowa_Zelandia, 'Finlandia': Finlandia}
     }
  
