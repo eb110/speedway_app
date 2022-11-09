@@ -1,5 +1,6 @@
 import Flags from '../../utility/Flags.js'
 import { useNavigate } from 'react-router-dom'
+import ReactHtmlParser from 'react-html-parser';
 
 const Rider = (props) => {
 
@@ -7,6 +8,7 @@ const Rider = (props) => {
     const navigate = useNavigate()
 
     let matchRider = props.rider
+    matchRider.pointsString = matchRider.pointsString.replaceAll('t', '<b>t</b>')
     let match = props.match
     let rider = '';
     if(matchRider.riderDB){
@@ -80,7 +82,7 @@ const Rider = (props) => {
                     margin: '1px'
                 }}
             >
-                {matchRider.pointsString}&nbsp;
+                {ReactHtmlParser (matchRider.pointsString)}&nbsp;
                 {matchRider.perfect && <b> X</b>}
             </div>
             <div

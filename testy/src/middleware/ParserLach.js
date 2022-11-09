@@ -49,7 +49,7 @@ class ParserLach {
     }
 
     teamParser(flag) {
-    //    console.log(this.data)
+   //     console.log(this.data)
         let base = ""
         if (flag === 1) {
             base = this.data.substring(0, this.data.indexOf('\n     '))
@@ -58,7 +58,7 @@ class ParserLach {
         else {
             base = this.data.substring(this.data.indexOf('<br>\n    ') + 9, this.data.indexOf('<br><br>'))
        //     base = this.data.substring(this.data.indexOf('<br>\n    ') + 9, this.data.indexOf('Sędzia'))
-           //          base = this.data.substring(this.data.indexOf('<br>\n    ') + 9, this.data.indexOf('</tt>'))
+        //            base = this.data.substring(this.data.indexOf('<br>\n    ') + 9, this.data.indexOf('Po'))
         }
         base = base.replaceAll('(G)', '')
         base = base.replaceAll('jr', '')
@@ -77,6 +77,18 @@ class ParserLach {
             if(rider.surname === 'H.JÖRGENSEN'){
                 rider.name = 'L'
                 rider.surname = 'Jörgensen'
+            }
+            if(rider.surname === 'B.MONBERG'){
+                rider.name = 'J'
+                rider.surname = 'MONBERG'
+            }
+            if(rider.surname === 'H.JONASSON'){
+                rider.name = 'T'
+                rider.surname = 'Jonasson'
+            }
+            if(rider.surname === 'JUUL'){
+                rider.name = 'P'
+                rider.surname = 'Larsen'
             }
             else if(rider.surname === 'H.NIELSEN'){
                 rider.name = 'J'
@@ -99,6 +111,90 @@ class ParserLach {
                 rider.name = 'H'
                 rider.surname = 'Andersen'
             }
+            else if(rider.surname === 'HAFENBROCK'){
+                rider.surname = 'Hefenbrock'
+            }
+            else if(rider.surname === 'KYLMÄKORPII'){
+                rider.surname = 'KYLMÄKORPI'
+            }
+            else if(rider.surname === 'RICHARDSSON'){
+                rider.surname = 'Richardson'
+            }
+            else if(rider.surname === 'LINBÄCK'){
+                rider.surname = 'LINDBÄCK'
+            }
+            else if(rider.surname === 'ZIELIŃSKI' && rider.name[0] === 'K'){
+                let datka = this.dateOfGame.substring(this.dateOfGame.lastIndexOf('-') + 1)
+                if(datka > 2005){
+                    rider.name = 'Kam'
+                }
+                else{
+                    rider.name = 'Krz'
+                }
+            }
+            else if(rider.surname === 'WIELEMBOREK' && rider.name[0] === 'R'){
+                let datka = this.dateOfGame.substring(this.dateOfGame.lastIndexOf('-') + 1)
+                if(datka > 2000){
+                    rider.name = 'Raf'
+                }
+                else{
+                    rider.name = 'Rom'
+                }
+            }
+            else if(rider.surname === 'FEDECZKO' && rider.name[0] === 'R'){
+                let datka = this.dateOfGame.substring(this.dateOfGame.lastIndexOf('-') + 1)
+                if(datka > 2000){
+                    rider.name = 'Rob'
+                }
+                else{
+                    rider.name = 'Rom'
+                }
+            }
+            else if(rider.surname === 'BEDNARSKI' && rider.name[0] === 'J'){
+                if(this.home === 'Toruń' || this.away === 'Toruń'){
+                    rider.name = 'Jar'
+                }
+                else{
+                    rider.name = 'Jan'
+                }
+            }
+            else if(rider.surname === 'ANDERSSON' && rider.name[0] === 'D'){
+                let datka = this.dateOfGame.substring(this.dateOfGame.lastIndexOf('-') + 1)
+                if(datka > 2005){
+                    rider.name = 'Den'
+                }
+                else{
+                    rider.name = 'Dan'
+                }
+            }
+            else if(rider.surname === 'JURCZYŃSKI' && rider.name[0] === 'J'){
+                let datka = this.dateOfGame.substring(this.dateOfGame.lastIndexOf('-') + 1)
+                if(datka > 2000){
+                    rider.name = 'Jor'
+                }
+                else{
+                    rider.name = 'Jar'
+                }
+            }
+            else if(rider.surname === 'KOWALSKI' && rider.name[0] === 'R'){
+                let datka = this.dateOfGame.substring(this.dateOfGame.lastIndexOf('-') + 1)
+                if(datka > 1993){
+                    rider.name = 'Raf'
+                }
+                else{
+                    rider.name = 'Rys'
+                }
+            }
+            else if(rider.surname === 'NOWACKI' && rider.name[0] === 'K'){
+                let datka = this.dateOfGame.substring(this.dateOfGame.lastIndexOf('-') + 1)
+                if(datka < 2010){
+                    rider.name = 'Krz'
+                }
+                else{
+                    rider.name = 'Kam'
+                }
+            }
+          
             // if (wsad.indexOf('jr') !== -1)
             //     rider.surname = rider.surname.substring(0, rider.surname.indexOf('jr.') + 3)
             // else {
@@ -107,6 +203,7 @@ class ParserLach {
             rider.pointsString = wsad.substring(wsad.indexOf('(') + 1, wsad.indexOf(')'))
             rider.pointsString = rider.pointsString.replaceAll('/', 'z')
             rider.pointsString = rider.pointsString.replaceAll('?', 'X')
+
             if(flag === 1){
                 rider.homeAway = 'away'
             }else{
